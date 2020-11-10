@@ -6,9 +6,7 @@ function Login() {
   return (
     <div className="main">
       <div className="login">
-        {
-          //<img className="login_lights" alt="lights" />
-        }
+        <img className="lights" src="lights.png" alt="logo" />
         <Link to="/">
           <img className="login__logo" src="./logomovie.png" alt="logo" />
         </Link>

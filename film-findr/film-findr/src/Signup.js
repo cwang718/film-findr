@@ -6,9 +6,7 @@ function signup() {
   return (
     <div className="main">
       <div className="signup">
-        {
-          //<img className="signup_lights" src= ""alt="lights" />
-        }
+        <img className="lights" src="lights.png" alt="logo" />
         <Link to="/">
           <img className="signup__logo" src="./logomovie.png" alt="logo" />
         </Link>
@@ -39,7 +37,6 @@ function signup() {
           ></input>
         </div>
         <button className="signup__button">create account</button>
-
         <div className="empty"></div>
       </div>
     </div>
