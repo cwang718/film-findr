@@ -9,8 +9,10 @@ function Login() {
         {
           //<img className="login_lights" alt="lights" />
         }
+        <Link to="/">
+          <img className="login__logo" src="./logomovie.png" alt="logo" />
+        </Link>
 
-        <img className="login__logo" src="./logomovie.png" alt="logo" />
         <div className="login_fields">
           <label className="login__labels">email:</label>
           <input

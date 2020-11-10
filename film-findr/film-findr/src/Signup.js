@@ -9,7 +9,9 @@ function signup() {
         {
           //<img className="signup_lights" src= ""alt="lights" />
         }
-        <img className="signup__logo" src="./logomovie.png" alt="logo" />
+        <Link to="/">
+          <img className="signup__logo" src="./logomovie.png" alt="logo" />
+        </Link>
         <div className="signup_fields">
           <label className="signup__labels">name:</label>
           <input

@@ -12,7 +12,7 @@ function HeaderMain() {
 
       <div className="header__search">
         <input className="header__searchInput" type="text" />
-        <img src={SearchIcon} className="header__searchIcon" />
+        <img src={SearchIcon} className="header__searchIcon" alt="search" />
       </div>
 
       <div className="header__nav">
