@@ -1,10 +1,15 @@
 import React from "react";
+import "./MovieHomePage.css";
 
-function MovieHomePage({ image, title }) {
+function MovieHomePage({ image, title, genres, rating }) {
   return (
     <div className="movie">
-      <img className="movie__image" src={image} />
-      <p className="movie__title">{title}</p>
+      <div className="movie__rating">
+        <span>{rating}</span>
+        <img src={image} alt="movie_poster" />
+      </div>
+      <h1 className="movie__title">{title}</h1>
+      <p className="movie__genres">{genres}</p>
     </div>
   );
 }

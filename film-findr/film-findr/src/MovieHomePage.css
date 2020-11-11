@@ -1,9 +1,54 @@
 .movie {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 10px;
+  padding: 20px;
+  width: 100%;
+  max-height: 400px;
+  min-width: 100px;
+  background-color: #2c2c2c;
+  z-index: 1;
 }
 
-.movie__image {
+.movie__rating {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.movie__rating > span {
+  font-size: 1.2rem;
+  font-family: "Montserrat", sans-serif;
+  background-color: #a19ff2;
+  padding: 0.5rem;
+  border-radius: 10px 10px 10px 10px;
+  margin-bottom: -1rem;
+  position: relative;
+}
+
+.movie__rating > img {
+  max-height: 25rem;
+  width: 100%;
+  object-fit: contain;
+  margin-bottom: -0.2rem;
 }
 
 .movie__title {
-    
+  font-size: 1.5rem;
+  font-family: "Montserrat", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  color: white;
+  margin-bottom: -0.2rem;
+}
+
+.movie__genres {
+  font-size: 0.7rem;
+  font-family: "Montserrat", sans-serif;
+  font-style: italic;
+  font-weight: normal;
+  color: #9ec1f6;
 }
