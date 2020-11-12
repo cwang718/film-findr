@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
 
 function Login() {
+  const [email, setEmail] = useState(""); // the variable email will have whatever the user inputted
+  const [password, setPassword] = useState(""); // the variable password will have whatever the user inputted
+
+  const logIn = (e) => {
+    e.preventDefault();
+
+    // firebase log in here
+  };
+
   return (
     <div className="main">
       <div className="login">
@@ -17,6 +26,8 @@ function Login() {
             type="email"
             className="login__email"
             name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="exampleemail@email.com"
             required
           ></input>
@@ -25,11 +36,15 @@ function Login() {
             type="password"
             className="login__password"
             name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="************"
             required
           ></input>
         </div>
-        <button className="login__button">see your movies!</button>
+        <button className="login__button" onClick={logIn}>
+          see your movies!
+        </button>
         <Link
           to="signup"
           className="login__link"
