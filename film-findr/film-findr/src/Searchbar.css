@@ -3,11 +3,11 @@
 }
 
 body {
-  font-size: 16px;  
+  font-size: 16px;
 }
 
 form {
-    width: 100%;
+  width: 100%;
 }
 
 .autocomplete {
@@ -31,12 +31,12 @@ input {
   color: white;
 }
 
-input[type=text] {
+input[type="text"] {
   background-color: #727272;
   width: 100%;
 }
 
-input[type=submit] {
+input[type="submit"] {
   background-color: #a19ff2;
   color: #fff;
   cursor: pointer;
@@ -56,17 +56,17 @@ input[type=submit] {
 .autocomplete-items div {
   padding: 10px;
   cursor: pointer;
-  background-color: #817eca; 
-  border-bottom: 1px solid #d4d4d4; 
+  background-color: #817eca;
+  border-bottom: 1px solid #d4d4d4;
 }
 
 /*Hovering an item:*/
 .autocomplete-items div:hover {
-  background-color: #a19ff2; 
+  background-color: #a19ff2;
 }
 
 /*Navigating through items using the arrow keys*/
 .autocomplete-active {
-  background-color: #a19ff2 !important; 
-  color: #ffffff; 
+  background-color: #a19ff2 !important;
+  color: #ffffff;
 }

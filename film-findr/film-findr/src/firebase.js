@@ -4,7 +4,7 @@ const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_apiKey,
   authDomain: process.env.REACT_APP_FIREBASE_auth,
   databaseURL: process.env.REACT_APP_FIREBASE_dburl,
-  projectId: "film-findr",
+  projectId: process.env.REACT_APP_FIREBASE_projectId,
   storageBucket: process.env.REACT_APP_FIREBASE_storage,
   messagingSenderId: process.env.REACT_APP_FIREBASE_messaging,
   appId: process.env.REACT_APP_FIREBASE_appId,
