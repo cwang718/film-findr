@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { fireAuth } from "./firebase";
 
 function Login() {
+  const history = useHistory();
   const [email, setEmail] = useState(""); // the variable email will have whatever the user inputted
   const [password, setPassword] = useState(""); // the variable password will have whatever the user inputted
+  const [errorMessage, setErrorMessage] = useState("");
 
   const logIn = (e) => {
     e.preventDefault();
-
+    fireAuth
+      .signInWithEmailAndPassword(email, password)
+      .then((auth) => {
+        console.log(auth);
+        if (auth) {
+          // if there is a user
+          history.push("./");
+        }
+      })
+      .catch((err) => setErrorMessage(err.message));
     // firebase log in here
   };
 
@@ -53,6 +65,7 @@ function Login() {
           <span className="login__dont">don’t have an account?</span>
           <span className="login__create">create account</span>
         </Link>
+        <h1 className="signup__error">{errorMessage}</h1>
         <div className="empty"></div>
       </div>
     </div>

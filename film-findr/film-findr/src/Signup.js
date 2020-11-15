@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 import "./Signup.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { fireAuth } from "./firebase";
 
 function Signup() {
+  const history = useHistory();
   const [name, setName] = useState(""); // the variable name will have whatever the user inputted
   const [email, setEmail] = useState(""); // the variable email will have whatever the user inputted
   const [password, setPassword] = useState(""); // the variable password will have whatever the user inputted
+  const [errorMessage, setErrorMessage] = useState("");
   const handlesignUp = (e) => {
     e.preventDefault();
-
+    fireAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then((auth) => {
+        console.log(auth);
+        if (auth) {
+          // if there is a user
+          history.push("./");
+        }
+      })
+      .catch((err) => setErrorMessage(err.message));
     // firebase sign up here
   };
   return (
@@ -53,6 +65,7 @@ function Signup() {
         <button className="signup__button" onClick={handlesignUp}>
           create account
         </button>
+        <h1 className="signup__error">{errorMessage}</h1>
         <div className="empty"></div>
       </div>
     </div>

@@ -1,0 +1,59 @@
+.reviewC {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-bottom: 2rem;
+}
+
+.reviewC__rating {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+.reviewC__title {
+  font-size: 1.5rem;
+  font-family: "Montserrat semibold", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  color: white;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.reviewC__star {
+  filter: invert(99%) sepia(80%) saturate(2993%) hue-rotate(348deg)
+    brightness(109%) contrast(106%);
+}
+
+.reviewC__text__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20rem;
+  margin-left: 20rem;
+  margin-bottom: 1rem;
+}
+
+.reviewC__text__container > img {
+  max-height: 9rem;
+  object-fit: contain;
+  margin-right: -1rem;
+}
+
+.reviewC__your__review {
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  font-style: italic;
+  background-color: #9ec1f6;
+  color: white;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  border-radius: 10px 10px 10px 10px;
+}

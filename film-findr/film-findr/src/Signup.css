@@ -29,6 +29,14 @@
   width: 22rem;
 }
 
+.signup__error {
+  color: red;
+  font-weight: light;
+  font-family: "Montserrat", sans-serif;
+  padding-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
 .signup__labels {
   color: white;
   font-size: 1.2rem;
