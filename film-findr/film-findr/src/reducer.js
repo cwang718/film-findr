@@ -1,6 +1,7 @@
 export const initialState = {
   reviews: [],
   user: null,
+  movieId: null,
 };
 
 const reducer = (state, action) => {
@@ -17,6 +18,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         user: action.user,
+      };
+
+    case "SET_MOVIE_ID":
+      return {
+        ...state,
+        movieId: action.movieId,
       };
 
     default:
