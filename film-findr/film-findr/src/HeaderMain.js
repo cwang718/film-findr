@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import "./HeaderMain.css";
+<<<<<<< Updated upstream
 import SearchIcon from "./icons/SearchIcon.svg";
 import { useStateValue } from "./StateProvider";
 import { fireAuth } from "./firebase";
+=======
+import Searchbar from "./Searchbar.js";
+>>>>>>> Stashed changes
 
 function HeaderMain() {
   const [state, action] = useStateValue(); // get user by state.user and get reviews by state.reviews
@@ -37,10 +41,8 @@ function HeaderMain() {
         <img className="header__logo" src="logomovie.png" alt="logo" />
       </Link>
 
-      <div className="header__search">
-        <input className="header__searchInput" type="text" />
-        <img src={SearchIcon} className="header__searchIcon" alt="search" />
-      </div>
+      <Searchbar>  
+      </Searchbar>
 
       <div className="header__nav">
         <div onClick={handleLogInOrReviews} className="header__option">

@@ -13,6 +13,8 @@ import Signup from "./Signup";
 import ReviewsPage from "./ReviewsPage";
 import { fireAuth } from "./firebase";
 import { useStateValue } from "./StateProvider";
+// import OneMovie from "./OneMovie.js";
+import Example from "./Example.js";
 
 function App() {
   const [{}, dispatch] = useStateValue();
@@ -37,20 +39,30 @@ function App() {
     <div className="app">
       <Router>
         <Switch>
+
           <Route path="/signup">
             <Signup />
           </Route>
+
           <Route path="/login">
             <Login />
           </Route>
+
           <Route exact path="/reviews">
             <HeaderMain />
             <ReviewsPage />
           </Route>
+
+          
+          <Route path="/example">
+            <Example></Example>
+          </Route>
+
           <Route exact path="/">
             <HeaderMain />
             <Home />
           </Route>
+          
         </Switch>
       </Router>
     </div>

@@ -6,6 +6,8 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  padding-top: 20px;
+  padding-bottom: 10px;
 }
 
 .header__logo {
@@ -16,6 +18,8 @@
 }
 
 .header__search {
+  height: 15px;
+  width: 100%;
   display: flex;
   flex: 1;
   align-items: center;
@@ -23,16 +27,17 @@
 }
 
 .header__searchInput {
-  height: 12px;
   padding: 10px;
-  border: none;
+  border: 1px solid rgb(192, 192, 192);
   width: 100%;
+  height: 41px;
   border-radius: 10px 0px 0px 10px;
 }
 
 .header__searchIcon {
   padding: 5px;
-  height: 22px !important;
+  height: 42px !important;
+  width: 50px;
   background-color: #a19ff2;
   border-radius: 0px 10px 10px 0px;
 }
@@ -74,3 +79,14 @@ a:link,
 a:active {
   text-decoration: none;
 }
+
+button:active {
+  background: #7776b1;
+  -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+     -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+          box-shadow: inset 0px 0px 5px #c1c1c1;
+   outline: none;
+   border: none;
+}
+
+button:focus {outline:0;}
