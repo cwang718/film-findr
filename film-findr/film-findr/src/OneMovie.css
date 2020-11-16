@@ -4,12 +4,56 @@
     width: 100%;
 }
 
+.content__container {
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+    margin-left: 5rem;
+    margin-right: 0rem;
+    margin-top: 4rem;
+    justify-content: center;
+}
+
+.left__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.right__container {
+    display: flex;
+    flex-direction: column;
+}
+
 .moviename {
     font-size: 40px;
-    color: black;
+    color: rgb(194, 190, 228);
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+    font-style: normal;
+    font-weight: bolder;
+}
+
+.movieyear {
+    font-family: "Montserrat", sans-serif;
+    font-size: 30px;
+    padding-left: 20px;
 }
 
 .movie__container {
     height: 100%;
     background-color: #2c2c2c;
+}
+
+.poster {
+    height: 40rem;
+    align-self: auto;
+    object-fit: contain;
+}
+
+.poster__container {
+    background-color: #2c2c2c;
+}
+
+.rating {
+    color: yellow;
 }

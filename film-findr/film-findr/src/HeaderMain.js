@@ -4,8 +4,8 @@ import "./HeaderMain.css";
 import SearchIcon from "./icons/SearchIcon.svg";
 import { useStateValue } from "./StateProvider";
 import { fireAuth } from "./firebase";
-import Searchbar from "./Searchbar.js";
 import { animations } from "react-animation";
+import Searchbar2 from "./Searchbar2.js";
 
 function HeaderMain() {
   const style = {
@@ -48,7 +48,7 @@ function HeaderMain() {
         />
       </Link>
 
-      <Searchbar></Searchbar>
+      <Searchbar2></Searchbar2>
 
       <div className="header__nav" style={style}>
         <div onClick={handleLogInOrReviews} className="header__option">

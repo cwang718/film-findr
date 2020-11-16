@@ -1,81 +1,50 @@
-import React, { Fragment } from "react";
+import React, {  useEffect, useState } from "react";
 import HeaderMain from "./HeaderMain";
-import Searchbar from "./Searchbar";
+import { useStateValue } from "./StateProvider";
+import axios from 'axios';
 import "./Home.css";
 import "./OneMovie.css";
 
-// let OneMovieComponents = async () => {
-//   try {
-//     let mid = document.getElementById("searchbutton").getAttribute("data-mid");
+function OneMovie() {
+  const [state, action] = useStateValue(); // get movie id by state.movieId
+  const [movieInfo, setMovieInfo] = useState([]);
+  console.log("onemovie: " + state.movieId);
 
-//     //Get specific movie info from an api query
-//     let movieObj = await httpGetMovieDetails(mid);
-//     console.log(movieObj);
+  useEffect(async () => {
+    let response = await axios({
+      url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      method: 'GET',
+    });
+    setMovieInfo(response.data);
+  }, []);
+  let imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
 
-//     return(
-//       <div className="movie__container">
-//         <div className="moviename">{movieObj.title}</div>
-//       </div>
-//     );
-//   } catch(err) {
-//     console.log("BOOOOOO: " + err);
-//   }
-// }
+  return (
+    <div className="onemovie">
+      <HeaderMain></HeaderMain>
+      <div className="home">
+        <div className="home__container">
+          <img className="home__image" src="./lights.png" alt="" />
+        </div>
+      </div>
 
-export default class OneMovie extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      title: null,
-    };
-  }
-
-  componentDidMount() {
-    const api_key = process.env.REACT_APP_FIREBASE_imdb;
-    let movie_id = Searchbar.getMovieId();
-    console.log(movie_id);
-    fetch(
-      "https://api.themoviedb.org/3/movie/" + movie_id + "?api_key=" + api_key
-    )
-      .then((response) => response.json())
-      .then((json) => this.setState({ loading: false, data: json }));
-  }
-
-  renderDetails = (data) => {
-    console.log(data);
-
-    return (
       <div className="movie__container">
-        <div className="moviename">
-          <ul>
-            {/* {data.map(item => (
-              <li style={{ listStyle: "none" }} key={item.id}>
-                {item.title}
-              </li>
-            ))} */}
-          </ul>
-        </div>
-      </div>
-    );
-  };
-
-  render() {
-    const { loading, data } = this.state;
-
-    return (
-      <div className="onemovie">
-        <HeaderMain></HeaderMain>
-        <div className="home">
-          <div className="home__container">
-            <img className="home__image" src="./lights.png" alt="" />
+        <div>{console.log(movieInfo)}</div>
+          <div className="moviename">{movieInfo.title}<span className="movieyear"> ({String(movieInfo.release_date).substr(0, 4)})</span></div>
+          <div className="content__container">
+              <div className="left__container">
+                  <img src={imgUrl} className="poster" alt="movie_poster"/>
+                  <div className="tagline">{movieInfo.tagline}</div>
+              </div>
+              <div className="right__container">
+                <div className="rating">3</div>
+              </div>
           </div>
-        </div>
-
-        <Fragment>
-          {loading ? "Classic loading palceholder" : this.renderDetails(data)}
-        </Fragment>
       </div>
-    );
-  }
+
+      
+  </div>
+  );
 }
+
+export default OneMovie;
