@@ -2,11 +2,11 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg");
+
   background-repeat: no-repeat;
   background-size: cover;
   margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
 }
 
 .reviewC__rating {
@@ -47,10 +47,12 @@
 }
 
 .reviewC__your__review {
-  font-size: 1rem;
+  min-height: 15rem;
+  min-width: 15rem;
+  font-size: 1.2rem;
   font-family: "Montserrat", sans-serif;
   font-style: italic;
-  background-color: #9ec1f6;
+  background-color: #3d3849;
   color: white;
   padding-top: 1rem;
   padding-bottom: 1rem;

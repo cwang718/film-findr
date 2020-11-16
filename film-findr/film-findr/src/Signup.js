@@ -16,13 +16,13 @@ function Signup() {
       .then((auth) => {
         if (auth) {
           // if there is a user
-
           fireDb.ref("users/" + auth.user.uid).set({
             movies: { rating: 4, review: "hey" },
             warwrwyaw: { rating: 1, review: "bad movie" },
             anothermovieid: { rating: 5, review: "great" },
           });
-          console.log(auth.user.uid);
+
+          localStorage.setItem("user", auth.user.uid);
           history.push("./");
         }
       })

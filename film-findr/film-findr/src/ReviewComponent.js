@@ -17,7 +17,9 @@ function ReviewComponent({ image, title, rating, review }) {
       </div>
       <div className="reviewC__text__container">
         <img src={image} alt="movie_poster" />
-        <div className="reviewC__your__review">"{review}"</div>
+        <div className="reviewC__your__review">
+          <span>"{review}"</span>
+        </div>
       </div>
     </div>
   );

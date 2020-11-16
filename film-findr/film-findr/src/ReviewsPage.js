@@ -10,31 +10,70 @@ function ReviewsPage() {
   const [{ reviews, user }, dispatch] = useStateValue();
   const [critique, setCritique] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [member, setMember] = useState([]);
+  const [sign, setSign] = useState("");
+  const [toreview, setToreview] = useState("");
+  const [count, setCount] = useState(0);
+
   let h = [];
   useEffect(() => {
-    const timer = setTimeout(() => {
+    if (!fireAuth.currentUser && localStorage.user == "null") {
+      setSign("Sign in");
+      setToreview("to see your reviewed movies");
+    }
+    if (fireAuth.currentUser) {
       try {
+        console.log("users/" + fireAuth.currentUser?.uid, "fireAuth");
         fireDb
-          .ref("users/" + fireAuth.currentUser.uid)
+          .ref("users/" + fireAuth.currentUser?.uid)
           .on("value", (snapshot) => {
             snapshot.forEach((snap) => {
               h.push(snap.val());
             });
-            console.log(h);
             setMovies(h);
+            setCount(h.length);
+            if (
+              h.length == 0 &&
+              fireAuth.currentUser &&
+              localStorage.user != "null"
+            ) {
+              setSign("Please review some movies first!");
+            }
           });
       } catch {}
-    }, 1000);
-    return () => clearTimeout(timer);
+    } else {
+      try {
+        console.log("users/" + localStorage.user, "localStorage");
+        fireDb.ref("users/" + localStorage.user).on("value", (snapshot) => {
+          snapshot.forEach((snap) => {
+            h.push(snap.val());
+          });
+
+          setMovies(h);
+          setCount(h.length);
+          if (
+            h.length == 0 &&
+            fireAuth.currentUser &&
+            localStorage.user != "null"
+          ) {
+            setSign("Please review some movies first!");
+          }
+        });
+      } catch {}
+    }
   }, []);
 
   const style = {
     animation: animations.fadeIn,
   };
+
   return (
-    <div className="reviewsPage" style={style}>
+    <div className="reviewsPage">
       <img className="review__lights" src="./lights.png" alt="" />
-      <div className="review__container">
+      <div className="review__count" style={style}>
+        <span style={style}> You have reviewed {count} movies so far!</span>
+      </div>
+      <div className="review__container" style={style}>
         {movies.map((movie) => (
           <ReviewComponent
             title="{movie.title}"
@@ -44,7 +83,12 @@ function ReviewsPage() {
           />
         ))}
       </div>
-      <div className="empty"></div>
+      <div className="empty">
+        <span className="review__spans">
+          {sign} <span className="review__spant">{toreview}</span>
+        </span>
+        <div className="review__empty"></div>
+      </div>
     </div>
   );
 }

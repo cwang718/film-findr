@@ -18,6 +18,7 @@ function Login() {
         console.log(auth);
         if (auth) {
           // if there is a user
+          localStorage.setItem("user", auth.user.uid);
           history.push("./");
         }
       })

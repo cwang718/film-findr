@@ -5,8 +5,12 @@ import SearchIcon from "./icons/SearchIcon.svg";
 import { useStateValue } from "./StateProvider";
 import { fireAuth } from "./firebase";
 import Searchbar from "./Searchbar.js";
+import { animations } from "react-animation";
 
 function HeaderMain() {
+  const style = {
+    animation: animations.fadeIn,
+  };
   const [state, action] = useStateValue(); // get user by state.user and get reviews by state.reviews
   const history = useHistory();
   const handleLogInOrReviews = () => {
@@ -26,6 +30,7 @@ function HeaderMain() {
       // is there someone logged in????
       console.log(state.user);
       fireAuth.signOut();
+      localStorage.setItem("user", null);
       history.push("./");
       // go to reviews page
     } else {
@@ -35,12 +40,17 @@ function HeaderMain() {
   return (
     <div className="header">
       <Link to="/">
-        <img className="header__logo" src="logomovie.png" alt="logo" />
+        <img
+          className="header__logo"
+          src="logomovie.png"
+          alt="logo"
+          style={style}
+        />
       </Link>
 
       <Searchbar></Searchbar>
 
-      <div className="header__nav">
+      <div className="header__nav" style={style}>
         <div onClick={handleLogInOrReviews} className="header__option">
           <span className="header__optionLog">
             {!state.user ? "log in" : "reviews"}
