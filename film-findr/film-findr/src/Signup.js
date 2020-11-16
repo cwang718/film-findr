@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./Signup.css";
 import { Link, useHistory } from "react-router-dom";
-import { fireAuth } from "./firebase";
-
+import { fireAuth, fireDb } from "./firebase";
+import { animations } from "react-animation";
 function Signup() {
   const history = useHistory();
   const [name, setName] = useState(""); // the variable name will have whatever the user inputted
@@ -14,18 +14,27 @@ function Signup() {
     fireAuth
       .createUserWithEmailAndPassword(email, password)
       .then((auth) => {
-        console.log(auth);
         if (auth) {
           // if there is a user
+
+          fireDb.ref("users/" + auth.user.uid).set({
+            movies: { rating: 4, review: "hey" },
+            warwrwyaw: { rating: 1, review: "bad movie" },
+            anothermovieid: { rating: 5, review: "great" },
+          });
+          console.log(auth.user.uid);
           history.push("./");
         }
       })
       .catch((err) => setErrorMessage(err.message));
     // firebase sign up here
   };
+  const style = {
+    animation: animations.fadeIn,
+  };
   return (
     <div className="main">
-      <div className="signup">
+      <div className="signup" style={style}>
         <img className="lights" src="lights.png" alt="logo" />
         <Link to="/">
           <img className="signup__logo" src="./logomovie.png" alt="logo" />

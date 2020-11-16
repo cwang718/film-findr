@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Login.css";
 import { Link, useHistory } from "react-router-dom";
 import { fireAuth } from "./firebase";
+import { animations } from "react-animation";
 
 function Login() {
   const history = useHistory();
@@ -23,10 +24,12 @@ function Login() {
       .catch((err) => setErrorMessage(err.message));
     // firebase log in here
   };
-
+  const style = {
+    animation: animations.fadeIn,
+  };
   return (
     <div className="main">
-      <div className="login">
+      <div className="login" style={style}>
         <img className="lights" src="lights.png" alt="logo" />
         <Link to="/">
           <img className="login__logo" src="./logomovie.png" alt="logo" />

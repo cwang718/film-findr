@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useMountEffect } from "react";
 import "./MovieHomePage.css";
+import { fireAuth, fireDb } from "./firebase";
+import { useStateValue } from "./StateProvider";
 
 function MovieHomePage({ image, title, genres, rating }) {
   return (

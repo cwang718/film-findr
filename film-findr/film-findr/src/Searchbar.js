@@ -20,8 +20,7 @@ export default class Searchbar extends React.Component {
   async handleChange(event) {
     this.setState({ value: event.target.value });
     let searchtitle = await httpGetMovies(this.state.value);
-    autocomplete(document.getElementById("myInput"), searchtitle);
-    console.log(searchtitle);
+    console.log(autocomplete(document.getElementById("myInput"), searchtitle));
   }
 
   render() {

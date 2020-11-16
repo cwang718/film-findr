@@ -16,7 +16,7 @@ try {
   firebaseFilmFindr = firebase.initializeApp(firebaseConfig);
 } catch (err) {}
 
-const fireDb = firebaseFilmFindr.firestore();
+const fireDb = firebaseFilmFindr.database();
 const fireAuth = firebase.auth();
 
 export { fireDb, fireAuth };
