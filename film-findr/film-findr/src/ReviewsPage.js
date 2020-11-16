@@ -4,6 +4,7 @@ import ReviewComponent from "./ReviewComponent";
 import { fireAuth, fireDb } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import { animations } from "react-animation";
+import { Link } from "react-router-dom";
 
 function ReviewsPage() {
   // get firebase movies collection
@@ -85,7 +86,10 @@ function ReviewsPage() {
       </div>
       <div className="empty">
         <span className="review__spans">
-          {sign} <span className="review__spant">{toreview}</span>
+          <Link to="login" style={{ color: "#a19ff2" }}>
+            {sign}
+          </Link>{" "}
+          <span className="review__spant">{toreview}</span>
         </span>
         <div className="review__empty"></div>
       </div>
