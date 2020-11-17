@@ -1,17 +1,58 @@
 import React, { useEffect, useState } from "react";
 import HeaderMain from "./HeaderMain";
 import { useStateValue } from "./StateProvider";
+import { fireAuth, fireDb } from "./firebase";
 import axios from "axios";
 import "./Home.css";
 import "./OneMovie.css";
+import { Link } from "react-router-dom";
+import Review from "./Review";
 
 function OneMovie() {
   const [state, action] = useStateValue(); // get movie id by state.movieId
   const [movieInfo, setMovieInfo] = useState([]);
   const [cast, setCast] = useState([]);
+  const [sign, setSign] = useState("");
+  const [toreview, setToreview] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [count, setCount] = useState(0);
   console.log("onemovie: " + state.movieId);
-
+  let h = [];
   useEffect(async () => {
+    if (!fireAuth.currentUser && localStorage.user == "null") {
+      setSign("Sign in");
+      setToreview("to see your reviewed movies");
+    }
+
+    if (fireAuth.currentUser) {
+      try {
+        fireDb
+          .ref("users/" + fireAuth.currentUser?.uid + "/" + state.movieId)
+          .on("value", (snapshot) => {
+            snapshot.forEach((snap) => {
+              h.push(snap.val());
+            });
+            setMovies(h);
+            setCount(h.length);
+          });
+      } catch {
+        console.log("no review");
+      }
+    } else {
+      try {
+        fireDb
+          .ref("users/" + localStorage.user + "/" + state.movieId)
+          .on("value", (snapshot) => {
+            snapshot.forEach((snap) => {
+              h.push(snap.val());
+            });
+            setMovies(h);
+            setCount(h.length);
+          });
+      } catch {
+        console.log("no review");
+      }
+    }
     let response = await axios({
       url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
       method: "GET",
@@ -25,6 +66,7 @@ function OneMovie() {
     setCast(response2.data);
   }, []);
   let imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
+
   const genres = () => {
     try {
       return movieInfo.genres
@@ -35,6 +77,7 @@ function OneMovie() {
       return "no genres found";
     }
   };
+  console.log(movies);
 
   const actors = () => {
     try {
@@ -62,18 +105,40 @@ function OneMovie() {
       return "no plot summary found in the database";
     }
   };
+
+  const test = () => {
+    if (!fireAuth.currentUser && localStorage.user == "null") {
+      return (
+        <span className="review__spans">
+          <Link to="login" style={{ color: "#a19ff2" }}>
+            {sign}
+          </Link>{" "}
+          <span className="review__spant">{toreview}</span>
+        </span>
+      );
+    }
+    if (movies.length !== 0) {
+      return (
+        <div className="review__true">
+          <Review rating={movies[0]} review={movies[1]} />
+        </div>
+      );
+    } else {
+      console.log(movies);
+      return <div>not reviewed</div>;
+    }
+  };
+
   return (
     <div className="onemovie">
-      <HeaderMain></HeaderMain>
       <div className="home">
-        <div className="home__container">
-          <img className="home__img" src="./lights.png" alt="" />
-        </div>
+        <img className="home__image" src="./lights.png" alt="" />
+        <div className="home__container"></div>
       </div>
 
       <div className="movie__container">
         <div>
-          <div>{console.log(genres())} </div>
+          <div>{console.log(movies[0])} </div>
 
           <div className="moviename">
             {movieInfo.title}
@@ -87,7 +152,7 @@ function OneMovie() {
               <img src={imgUrl} className="poster" alt="movie_poster" />
               <div className="tagline">{movieInfo.tagline}</div>
             </div>
-            <div className="right__container">
+            <div className="right_container">
               <div className="rating">
                 <span className="rating__title">RATING</span>
                 <span className="rating__count">{movieInfo.vote_average}</span>
@@ -105,12 +170,16 @@ function OneMovie() {
                   <span className="info__title">Cast: </span>
                   <span className="info__value">{actors()}</span>
                 </div>
-                <span className="info__overview">{overview()}</span>
+                <div className="info__container">
+                  <span className="info__overview">{overview()}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div className="your_review">{test()}</div>
     </div>
   );
 }

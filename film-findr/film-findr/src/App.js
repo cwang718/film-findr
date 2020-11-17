@@ -51,8 +51,8 @@ function App() {
             <ReviewsPage />
           </Route>
 
-          
           <Route path="/onemovie">
+            <HeaderMain />
             <OneMovie />
           </Route>
 

@@ -1,0 +1,70 @@
+.reviewT {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.reviewT__rating {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+.reviewT__title {
+  font-size: 1.5rem;
+  font-family: "Montserrat semibold", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  color: white;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.reviewT__star {
+  filter: invert(99%) sepia(80%) saturate(2993%) hue-rotate(348deg)
+    brightness(109%) contrast(106%);
+}
+
+.reviewT__text__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20rem;
+  margin-left: 20rem;
+  margin-bottom: 1rem;
+}
+
+.reviewT__text__container > img {
+  max-height: 9rem;
+  object-fit: contain;
+  margin-right: -1rem;
+}
+
+.reviewT__your__review {
+  min-height: 15rem;
+  min-width: 15rem;
+  font-size: 1.2rem;
+  font-family: "Montserrat", sans-serif;
+  font-style: italic;
+  background-color: #3d3849;
+  color: white;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.reviewT__your__review:hover {
+  -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+  -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+  box-shadow: inset 0px 0px 5px #c1c1c1;
+  outline: none;
+  border: none;
+}
