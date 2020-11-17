@@ -1,3 +1,15 @@
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useEffect, useState } from "react";
 import HeaderMain from "./HeaderMain";
 import { useStateValue } from "./StateProvider";
@@ -13,26 +25,26 @@ function OneMovie() {
 
   useEffect(async () => {
     let response = await axios({
-      url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      //url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      url: `https://api.themoviedb.org/3/movie/190138?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
       method: "GET",
     });
 
     let response2 = await axios({
-      url: `https://api.themoviedb.org/3/movie/${state.movieId}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      //url: `https://api.themoviedb.org/3/movie/${state.movieId}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      url: `https://api.themoviedb.org/3/movie/190138/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
       method: "GET",
     });
     setMovieInfo(response.data);
     setCast(response2.data);
   }, []);
   let imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
+
   const genres = () => {
     try {
-      return movieInfo.genres
-        .slice(0, 3)
-        .map((genre) => " " + genre.name)
-        .toString();
+      return movieInfo.genres.slice(0, 3);
     } catch {
-      return "no genres found";
+      console.log(movieInfo);
     }
   };
 
@@ -43,23 +55,21 @@ function OneMovie() {
         .slice(0, 3)
         .map((genre) => " " + genre)
         .toString();
-    } catch {
-      return "no actors found in the database";
-    }
+    } catch {}
   };
 
   const director = () => {
     try {
       return cast.crew.find((c) => c.job === "Director").name;
     } catch {
-      return "no director found in the database";
+      console.log();
     }
   };
   const overview = () => {
     try {
       return movieInfo.overview;
     } catch {
-      return "no plot summary found in the database";
+      console.log(movieInfo);
     }
   };
   return (
@@ -73,7 +83,7 @@ function OneMovie() {
 
       <div className="movie__container">
         <div>
-          <div>{console.log(genres())} </div>
+          <div>{} </div>
 
           <div className="moviename">
             {movieInfo.title}
@@ -93,18 +103,12 @@ function OneMovie() {
                 <span className="rating__count">{movieInfo.vote_average}</span>
               </div>
               <div className="info">
-                <div className="info__container">
-                  <span className="info__title">Genre: </span>
-                  <span className="info__value">{genres()}</span>
-                </div>
-                <div className="info__container">
-                  <span className="info__title">Director: </span>
-                  <span className="info__value">{director()}</span>
-                </div>
-                <div className="info__container">
-                  <span className="info__title">Cast: </span>
-                  <span className="info__value">{actors()}</span>
-                </div>
+                <span className="info__title">Genre: </span>
+                <span className="info__value">{genres()}</span>
+                <span className="info__title">Cast: </span>
+                <span className="info__value">{actors()}</span>
+                <span className="info__title">Director: </span>
+                <span className="info__value">{director()}</span>
                 <span className="info__overview">{overview()}</span>
               </div>
             </div>
@@ -116,3 +120,4 @@ function OneMovie() {
 }
 
 export default OneMovie;
+

@@ -15,6 +15,7 @@ function HeaderMain() {
   const history = useHistory();
   const handleLogInOrReviews = () => {
     console.log(state.user);
+    console.log(process.env.REACT_APP_FIREBASE_apiKey, "api key");
     if (state.user) {
       // is there someone logged in????
       console.log(state.user);
