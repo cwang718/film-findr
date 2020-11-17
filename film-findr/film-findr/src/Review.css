@@ -52,19 +52,10 @@
   font-size: 1.2rem;
   font-family: "Montserrat", sans-serif;
   font-style: italic;
-  background-color: #3d3849;
   color: white;
   padding-top: 1rem;
   padding-bottom: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;
   border-radius: 10px 10px 10px 10px;
-}
-
-.reviewT__your__review:hover {
-  -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-  -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
-  box-shadow: inset 0px 0px 5px #c1c1c1;
-  outline: none;
-  border: none;
 }

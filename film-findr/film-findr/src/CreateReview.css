@@ -1,0 +1,68 @@
+.createR {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: -7.5rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-bottom: 2rem;
+}
+
+.createR__rating {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+.createR__title {
+  font-size: 1.5rem;
+  font-family: "Montserrat semibold", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  color: white;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.createR__star {
+  filter: invert(70%) sepia(7%) saturate(133%) hue-rotate(314deg)
+    brightness(85%) contrast(84%);
+  width: 40px;
+  object-fit: contain;
+}
+
+.createR__text__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.createR__text__container > span {
+  padding-top: 1rem;
+  font-size: 1rem;
+}
+
+.createR__textarea {
+  height: 40vh;
+  width: 100vh;
+  padding: 1rem;
+  object-fit: contain;
+  background-color: #9ec1f6;
+  font-size: 1.5rem;
+  font-family: "Montserrat semibold", sans-serif;
+}
+
+.createR__text__container > img {
+  max-height: 9rem;
+  object-fit: contain;
+  margin-right: -1rem;
+}
+
+.createR__star__yellow {
+  filter: invert(99%) sepia(80%) saturate(2993%) hue-rotate(348deg)
+    brightness(109%) contrast(106%);
+  width: 40px;
+  object-fit: contain;
+}

@@ -7,6 +7,7 @@ import "./Home.css";
 import "./OneMovie.css";
 import { Link } from "react-router-dom";
 import Review from "./Review";
+import CreateReview from "./CreateReview";
 
 function OneMovie() {
   const [state, action] = useStateValue(); // get movie id by state.movieId
@@ -125,7 +126,7 @@ function OneMovie() {
       );
     } else {
       console.log(movies);
-      return <div>not reviewed</div>;
+      return <CreateReview movieId={state.movieId} />;
     }
   };
 
