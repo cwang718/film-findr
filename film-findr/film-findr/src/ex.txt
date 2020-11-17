@@ -121,3 +121,197 @@ function OneMovie() {
 
 export default OneMovie;
 
+
+
+ <div className="home">
+      <div className="home__container">
+        <img className="home__image" src="./lights.png" alt="" />
+
+        <div className="home__row" style={style}>
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+        </div>
+
+        <div className="home__row" style={style}>
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+        </div>
+
+        <div className="home__row" style={style}>
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+          <MovieHomePage
+            title="Sample Movie"
+            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
+            genres="Mystery, Supernatural, Action"
+            rating="9.0"
+          />
+        </div>
+      </div>
+    </div>
+
+
+
+    .lights {
+  margin-bottom: 10rem;
+  background-color: #2c2c2c;
+  width: 100%;
+}
+.home__image {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  background-color: #2c2c2c;
+  width: 100%;
+  float: center;
+}
+
+.home__container {
+  background-color: #2c2c2c;
+}
+.home {
+  background-color: #2c2c2c;
+  display: flex;
+  justify-content: center;
+}
+
+.home__row {
+  display: flex;
+  z-index: 1;
+  margin-left: 0rem;
+  margin-right: rem;
+  margin-top: 4rem;
+}
+
+
+HeaderMain 
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import "./HeaderMain.css";
+import SearchIcon from "./icons/SearchIcon.svg";
+import { useStateValue } from "./StateProvider";
+import { fireAuth } from "./firebase";
+import { animations } from "react-animation";
+import Searchbar2 from "./Searchbar2.js";
+
+function HeaderMain() {
+  const style = {
+    animation: animations.fadeIn,
+  };
+  const [state, action] = useStateValue(); // get user by state.user and get reviews by state.reviews
+  const history = useHistory();
+  const handleLogInOrReviews = () => {
+    console.log(state.user);
+    console.log(process.env.REACT_APP_FIREBASE_apiKey, "api key");
+    if (state.user) {
+      // is there someone logged in????
+      console.log(state.user);
+      // go to reviews page
+      history.push("./reviews"); //redirect to the reviews path
+    } else {
+      history.push("./login");
+    }
+  };
+
+  const handleCreateOrLogOut = () => {
+    if (state.user) {
+      // is there someone logged in????
+      console.log(state.user);
+      fireAuth.signOut();
+      localStorage.setItem("user", null);
+      history.push("./");
+      // go to reviews page
+    } else {
+      history.push("./signup");
+    }
+  };
+  return (
+    <div className="header">
+      <Link to="/">
+        <img
+          className="header__logo"
+          src="logomovie.png"
+          alt="logo"
+          style={style}
+        />
+      </Link>
+
+      <Searchbar2></Searchbar2>
+
+      <div className="header__nav" style={style}>
+        <div onClick={handleLogInOrReviews} className="header__option">
+          <span className="header__optionLog">
+            {!state.user ? "log in" : "reviews"}
+          </span>
+        </div>
+
+        <div onClick={handleCreateOrLogOut} className="header__option">
+          <span className="header__optionSign">
+            {!state.user ? "create account" : "log out"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default HeaderMain;
