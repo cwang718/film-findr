@@ -9,7 +9,6 @@ function Home() {
   const style = {
     animation: animations.fadeIn,
   };
-  const history = useHistory();
   const [popularMoviesInfo, setPopularMoviesInfo] = useState([]);
   const [genreList, setGenreList] = useState([]);
   useEffect(() => {
@@ -28,23 +27,18 @@ function Home() {
     }
     fetchInfo();
   }, []);
-  const linkToOneMovie = (e) => {
-    //localStorage.setItem("movieId", 2);
-    console.log("hey");
-  };
+
   //.map((genre) => " " + genre.name)
   //.toString();
   return (
     <div className="home">
       <div className="home__container">
         <img className="home__image" src="./lights.png" alt="" />
-
         <div className="grid-container" style={style}>
           {popularMoviesInfo.map(
             ({ title, poster_path, genre_ids, vote_average, id }) => (
               <div className="grid-item">
                 <MovieHomePage
-                  className="grid-item"
                   id={id}
                   title={title}
                   image={`https://image.tmdb.org/t/p/original/${poster_path}`}
