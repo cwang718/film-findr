@@ -27,7 +27,13 @@ function OneMovie() {
   useEffect(async () => {
     if (state.movieId) {
       reloadMovie = state.movieId;
-      console.log(reloadMovie, "reload", "movieId", state.movieId);
+      console.log(
+        reloadMovie,
+        "reload",
+        "movieId",
+        state.movieId,
+        "while localStorage has " + localStorage.movieId
+      );
     } else {
       reloadMovie = localStorage.movieId;
       console.log(reloadMovie, "reload", "localStorage", localStorage.movieId);
@@ -76,6 +82,7 @@ function OneMovie() {
       method: "GET",
     });
     setMovieInfo(response.data);
+    console.log(movieInfo);
     setCast(response2.data);
   }, []);
   let imgUrl;

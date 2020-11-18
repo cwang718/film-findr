@@ -54,3 +54,12 @@
   font-weight: normal;
   color: #9ec1f6;
 }
+
+.movie__title__small {
+  font-size: 1.5rem;
+  font-family: "Montserrat", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  color: white;
+  margin-bottom: -0.2rem;
+}

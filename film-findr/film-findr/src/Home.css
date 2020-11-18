@@ -35,6 +35,7 @@
   padding: 10px;
   justify-items: center;
   margin-top: 2rem;
+  grid-auto-rows: 1fr;
 }
 
 .grid-item1 {

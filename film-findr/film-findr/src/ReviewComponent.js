@@ -1,8 +1,10 @@
 import React from "react";
 import "./ReviewComponent.css";
 import Star from "./icons/Star.svg";
+import { Link, useHistory } from "react-router-dom";
+import { useStateValue } from "./StateProvider";
 
-function ReviewComponent({ image, title, rating, review }) {
+function ReviewComponent({ image, title, rating, review, id }) {
   return (
     <div className="reviewC">
       <div className="reviewC__rating">

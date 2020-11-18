@@ -10,7 +10,7 @@ function Review({ rating, review }) {
           {Array(rating)
             .fill()
             .map((rating) => (
-              <img src={Star} className="reviewT__star" alt="star" />
+              <img src={Star} className="createR__star__yellow" alt="star" />
             ))}
         </div>
       </div>
