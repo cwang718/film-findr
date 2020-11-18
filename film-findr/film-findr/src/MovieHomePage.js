@@ -18,11 +18,20 @@ function MovieHomePage({ image, title, genres, rating, id }) {
     });
     history.push("/onemovie");
   };
+  if (state.user === null) {
+    return <div>loading</div>;
+  }
   return (
     <div className="movie">
       <div className="movie__rating">
         <span>{rating}</span>
-        <img className = "star"src={image} alt="movie_poster" id={id} onClick={linkToOneMovie} />
+        <img
+          className="star"
+          src={image}
+          alt="movie_poster"
+          id={id}
+          onClick={linkToOneMovie}
+        />
       </div>
       <h1 className="movie__title">{title}</h1>
       <p className="movie__genres">{genres}</p>

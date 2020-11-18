@@ -73,7 +73,6 @@ export default function autocomplete(input, array) {
                         //Simulate a click on active item
                         if(x) {
                             x[curFocus].click();
-                            // console.log("in autocomplete: " + x[curFocus].children[1].getAttribute("data-mid"));
                             // return x[curFocus].children[1].getAttribute("data-mid");
                             input.setAttribute("data-mid", x[curFocus].children[1].getAttribute("data-mid"));
                         }

@@ -20,7 +20,6 @@ function App() {
   useEffect(() => {
     fireAuth.onAuthStateChanged((authUser) => {
       // if someone logs in or logs out
-      //console.log(authUser);
       if (authUser) {
         dispatch({
           type: "SET_USER",

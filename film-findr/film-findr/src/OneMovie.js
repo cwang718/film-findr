@@ -55,7 +55,7 @@ function OneMovie() {
             setCount(h.length);
           });
       } catch {
-        //console.log("no review");
+        
       }
     } else {
       try {
@@ -82,7 +82,6 @@ function OneMovie() {
       method: "GET",
     });
     setMovieInfo(response.data);
-    console.log(movieInfo);
     setCast(response2.data);
   }, []);
   let imgUrl;

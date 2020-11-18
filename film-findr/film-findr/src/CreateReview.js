@@ -33,7 +33,7 @@ function CreateReview({ movieId, title }) {
     if (selected !== 0) {
       return;
     }
-    console.log(selected);
+
     let stars = [
       document.getElementById(`1star`),
       document.getElementById(`2star`),
@@ -68,9 +68,9 @@ function CreateReview({ movieId, title }) {
     let cId = e.currentTarget.id;
     let realId = cId.slice(0, 1);
     let h = Number(realId);
-    console.log();
+
     setSelected(h);
-    console.log(h);
+
     let stars = [
       document.getElementById(`1star`),
       document.getElementById(`2star`),
@@ -111,7 +111,6 @@ function CreateReview({ movieId, title }) {
       setErrorMessage("Rate the movie using the stars!");
     } else {
       try {
-        console.log(movieInfo);
         fireDb.ref("users/" + fireAuth.currentUser?.uid + "/" + movieId).set({
           movieId: {
             rating: selected,

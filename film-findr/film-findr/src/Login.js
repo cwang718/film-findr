@@ -15,7 +15,6 @@ function Login() {
     fireAuth
       .signInWithEmailAndPassword(email, password)
       .then((auth) => {
-        console.log(auth);
         if (auth) {
           // if there is a user
           localStorage.setItem("user", auth.user.uid);
