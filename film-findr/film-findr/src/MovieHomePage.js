@@ -11,16 +11,18 @@ function MovieHomePage({ image, title, genres, rating, id }) {
   const linkToOneMovie = (e) => {
     //localStorage.setItem("movieId", 2);
     let movId = e.currentTarget.id;
-    localStorage.setItem("movieId", movId);
+    //localStorage.setItem("movieId", movId);
     dispatch({
       type: "SET_MOVIE_ID",
       movieId: movId,
     });
     history.push("/onemovie");
   };
-  if (state.user === null) {
-    return <div>loading</div>;
-  }
+  // console.log(state.user);
+  // if (state.user === null) {
+  //   return <div>loading</div>;
+  // }
+
   return (
     <div className="movie">
       <div className="movie__rating">

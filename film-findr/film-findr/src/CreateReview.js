@@ -138,7 +138,7 @@ function CreateReview({ movieId, title }) {
           </div>
         </div>
         <div className="createR__text__container">
-          {console.log(movieId)}
+          {}
           <textarea
             className="createR__textarea"
             id="create_review_text"

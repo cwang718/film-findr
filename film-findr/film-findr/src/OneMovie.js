@@ -24,16 +24,11 @@ function OneMovie() {
   const style = {
     animation: animations.fadeIn,
   };
+
   useEffect(async () => {
+    console.log(state.movieId);
     if (state.movieId) {
       reloadMovie = state.movieId;
-      console.log(
-        reloadMovie,
-        "reload",
-        "movieId",
-        state.movieId,
-        "while localStorage has " + localStorage.movieId
-      );
     } else {
       reloadMovie = localStorage.movieId;
       console.log(reloadMovie, "reload", "localStorage", localStorage.movieId);
@@ -54,9 +49,7 @@ function OneMovie() {
             setMovies(h);
             setCount(h.length);
           });
-      } catch {
-        
-      }
+      } catch {}
     } else {
       try {
         fireDb
@@ -155,6 +148,10 @@ function OneMovie() {
     }
   };
 
+  if (state.movieId === null) {
+    console.log("loading");
+    return <div>loading...</div>;
+  }
   return (
     <div className="onemovie" style={style}>
       <div className="home">
