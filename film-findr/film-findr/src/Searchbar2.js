@@ -52,6 +52,8 @@ function Searchbar2() {
               type: "SET_MOVIE_ID",
               movieId: mid,
             });
+
+            localStorage.setItem("movieId", mid);
           }}
         >
           <img src={SearchIcon} id="searchicon" alt="search" />

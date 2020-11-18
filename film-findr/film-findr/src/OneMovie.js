@@ -33,11 +33,12 @@ function OneMovie() {
             snapshot.forEach((snap) => {
               h.push(snap.val());
             });
+            console.log(h);
             setMovies(h);
             setCount(h.length);
           });
       } catch {
-        console.log("no review");
+        //console.log("no review");
       }
     } else {
       try {
@@ -48,10 +49,11 @@ function OneMovie() {
               h.push(snap.val());
             });
             setMovies(h);
+            console.log(h);
             setCount(h.length);
           });
       } catch {
-        console.log("no review");
+        //console.log("no review");
       }
     }
     let response = await axios({
@@ -66,7 +68,12 @@ function OneMovie() {
     setMovieInfo(response.data);
     setCast(response2.data);
   }, []);
-  let imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
+  let imgUrl;
+  if (movieInfo.poster_path) {
+    imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
+  } else {
+    imgUrl = "./error.png";
+  }
 
   const genres = () => {
     try {
@@ -78,7 +85,6 @@ function OneMovie() {
       return "no genres found";
     }
   };
-  console.log(movies);
 
   const actors = () => {
     try {
@@ -121,7 +127,7 @@ function OneMovie() {
     if (movies.length !== 0) {
       return (
         <div className="review__true">
-          <Review rating={movies[0]} review={movies[1]} />
+          <Review rating={movies[0].rating} review={movies[0].review} />
         </div>
       );
     } else {
@@ -139,7 +145,7 @@ function OneMovie() {
 
       <div className="movie__container">
         <div>
-          <div>{console.log(movies[0])} </div>
+          <div>{} </div>
 
           <div className="moviename">
             {movieInfo.title}

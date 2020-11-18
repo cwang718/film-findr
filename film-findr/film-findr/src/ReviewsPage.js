@@ -67,7 +67,6 @@ function ReviewsPage() {
   const style = {
     animation: animations.fadeIn,
   };
-
   return (
     <div className="reviewsPage">
       <img className="review__lights" src="./lights.png" alt="" />
@@ -75,14 +74,16 @@ function ReviewsPage() {
         <span style={style}> You have reviewed {count} movies so far!</span>
       </div>
       <div className="review__container" style={style}>
-        {movies.map((movie) => (
-          <ReviewComponent
-            title="{movie.title}"
-            image="https://images-na.ssl-images-amazon.com/images/I/71tUSFn3W0L._AC_SL1000_.jpg"
-            rating={movie.rating}
-            review={movie.review}
-          />
-        ))}
+        {movies
+          .map((film) => film.movieId)
+          .map((movie) => (
+            <ReviewComponent
+              title={movie.movieTitle}
+              image={movie.poster}
+              rating={movie.rating}
+              review={movie.review}
+            />
+          ))}
       </div>
       <div className="empty">
         <span className="review__spans">

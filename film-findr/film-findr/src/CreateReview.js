@@ -4,12 +4,30 @@ import "./CreateReview.css";
 import { useStateValue } from "./StateProvider";
 import { fireAuth, fireDb } from "./firebase";
 import { Link, useHistory } from "react-router-dom";
-function CreateReview({ movieId }) {
+import axios from "axios";
+
+function CreateReview({ movieId, title }) {
   const [state, action] = useStateValue();
   const [selected, setSelected] = useState(0);
   const [myReview, setMyReview] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
+  const [movieInfo, setMovieInfo] = useState([]);
+
+  useEffect(async () => {
+    let response = await axios({
+      url: `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      method: "GET",
+    });
+    setMovieInfo(response.data);
+  }, []);
+
+  let imgUrl;
+  if (movieInfo.poster_path) {
+    imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
+  } else {
+    imgUrl = "./error.png";
+  }
 
   const changeColor = (e) => {
     if (selected !== 0) {
@@ -87,22 +105,24 @@ function CreateReview({ movieId }) {
   };
 
   const handleSubmit = () => {
-    let mid = `${movieId}`;
-    console.log(mid);
     if (myReview.length == 0) {
       setErrorMessage("Type something in the box first!");
     } else if (selected == 0) {
       setErrorMessage("Rate the movie using the stars!");
     } else {
-      let object = new Object();
-      object[mid] = { rating: selected, review: myReview };
-      let j = object.mid;
-      console.log(j);
-      /*
-      fireDb.ref("users/" + fireAuth.currentUser?.uid).update({
-        j,
-      });
-      */
+      try {
+        console.log(movieInfo);
+        fireDb.ref("users/" + fireAuth.currentUser?.uid + "/" + movieId).set({
+          movieId: {
+            rating: selected,
+            review: myReview,
+            movieTitle: movieInfo.title,
+            poster: imgUrl,
+          },
+        });
+      } catch (err) {
+        setErrorMessage(err.message);
+      }
     }
   };
 
