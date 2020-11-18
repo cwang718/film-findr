@@ -8,6 +8,7 @@ import "./OneMovie.css";
 import { Link } from "react-router-dom";
 import Review from "./Review";
 import CreateReview from "./CreateReview";
+import { animations } from "react-animation";
 
 function OneMovie() {
   const [state, action] = useStateValue(); // get movie id by state.movieId
@@ -17,9 +18,20 @@ function OneMovie() {
   const [toreview, setToreview] = useState("");
   const [movies, setMovies] = useState([]);
   const [count, setCount] = useState(0);
-  console.log("onemovie: " + state.movieId);
+
   let h = [];
+  let reloadMovie;
+  const style = {
+    animation: animations.fadeIn,
+  };
   useEffect(async () => {
+    if (state.movieId) {
+      reloadMovie = state.movieId;
+      console.log(reloadMovie, "reload", "movieId", state.movieId);
+    } else {
+      reloadMovie = localStorage.movieId;
+      console.log(reloadMovie, "reload", "localStorage", localStorage.movieId);
+    }
     if (!fireAuth.currentUser && localStorage.user == "null") {
       setSign("Sign in");
       setToreview("to see your reviewed movies");
@@ -28,12 +40,11 @@ function OneMovie() {
     if (fireAuth.currentUser) {
       try {
         fireDb
-          .ref("users/" + fireAuth.currentUser?.uid + "/" + state.movieId)
+          .ref("users/" + fireAuth.currentUser?.uid + "/" + reloadMovie)
           .on("value", (snapshot) => {
             snapshot.forEach((snap) => {
               h.push(snap.val());
             });
-            console.log(h);
             setMovies(h);
             setCount(h.length);
           });
@@ -43,13 +54,12 @@ function OneMovie() {
     } else {
       try {
         fireDb
-          .ref("users/" + localStorage.user + "/" + state.movieId)
+          .ref("users/" + localStorage.user + "/" + reloadMovie)
           .on("value", (snapshot) => {
             snapshot.forEach((snap) => {
               h.push(snap.val());
             });
             setMovies(h);
-            console.log(h);
             setCount(h.length);
           });
       } catch {
@@ -57,12 +67,12 @@ function OneMovie() {
       }
     }
     let response = await axios({
-      url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      url: `https://api.themoviedb.org/3/movie/${reloadMovie}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
       method: "GET",
     });
 
     let response2 = await axios({
-      url: `https://api.themoviedb.org/3/movie/${state.movieId}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      url: `https://api.themoviedb.org/3/movie/${reloadMovie}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
       method: "GET",
     });
     setMovieInfo(response.data);
@@ -131,13 +141,16 @@ function OneMovie() {
         </div>
       );
     } else {
-      console.log(movies);
-      return <CreateReview movieId={state.movieId} />;
+      return (
+        <CreateReview
+          movieId={state.movieId ? state.movieId : localStorage.movieId}
+        />
+      );
     }
   };
 
   return (
-    <div className="onemovie">
+    <div className="onemovie" style={style}>
       <div className="home">
         <img className="home__image" src="./lights.png" alt="" />
         <div className="home__container"></div>

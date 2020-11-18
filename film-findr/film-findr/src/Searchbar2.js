@@ -52,7 +52,6 @@ function Searchbar2() {
               type: "SET_MOVIE_ID",
               movieId: mid,
             });
-
             localStorage.setItem("movieId", mid);
           }}
         >
