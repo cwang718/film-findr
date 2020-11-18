@@ -39,7 +39,9 @@
   margin-left: 20rem;
   margin-bottom: 1rem;
 }
-
+.review__true {
+  margin-top: -7;
+}
 .reviewT__text__container > img {
   max-height: 9rem;
   object-fit: contain;
@@ -48,12 +50,10 @@
 
 .reviewT__your__review {
   min-height: 15rem;
-  min-width: 15rem;
   font-size: 1.2rem;
   font-family: "Montserrat", sans-serif;
   font-style: italic;
   color: white;
-  padding-top: 1rem;
   padding-bottom: 1rem;
   padding-left: 1rem;
   padding-right: 1rem;

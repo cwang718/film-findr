@@ -3,12 +3,13 @@ import "./Home.css";
 import MovieHomePage from "./MovieHomePage";
 import { animations } from "react-animation";
 import axios from "axios";
+import { Link, useHistory } from "react-router-dom";
 
 function Home() {
   const style = {
     animation: animations.fadeIn,
   };
-
+  const history = useHistory();
   const [popularMoviesInfo, setPopularMoviesInfo] = useState([]);
   const [genreList, setGenreList] = useState([]);
   useEffect(() => {
@@ -27,7 +28,10 @@ function Home() {
     }
     fetchInfo();
   }, []);
-  console.log(popularMoviesInfo);
+  const linkToOneMovie = (e) => {
+    //localStorage.setItem("movieId", 2);
+    console.log("hey");
+  };
   //.map((genre) => " " + genre.name)
   //.toString();
   return (
@@ -37,17 +41,20 @@ function Home() {
 
         <div className="grid-container" style={style}>
           {popularMoviesInfo.map(
-            ({ title, poster_path, genre_ids, vote_average }) => (
-              <MovieHomePage
-                className="grid-item"
-                title={title}
-                image={`https://image.tmdb.org/t/p/original/${poster_path}`}
-                genres={genreList
-                  .filter((oneGenre) => genre_ids.includes(oneGenre.id))
-                  .map((one) => " " + one.name)
-                  .toString()}
-                rating={vote_average}
-              />
+            ({ title, poster_path, genre_ids, vote_average, id }) => (
+              <div className="grid-item">
+                <MovieHomePage
+                  className="grid-item"
+                  id={id}
+                  title={title}
+                  image={`https://image.tmdb.org/t/p/original/${poster_path}`}
+                  genres={genreList
+                    .filter((oneGenre) => genre_ids.includes(oneGenre.id))
+                    .map((one) => " " + one.name)
+                    .toString()}
+                  rating={vote_average}
+                />
+              </div>
             )
           )}
         </div>
