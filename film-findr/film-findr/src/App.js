@@ -14,11 +14,14 @@ import ReviewsPage from "./ReviewsPage";
 import { fireAuth } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import OneMovie from "./OneMovie.js";
+import CreateReview from "./CreateReview.js";
+import EditReview from "./EditReview.js";
 
 function App() {
   const [{}, dispatch] = useStateValue();
   useEffect(() => {
     fireAuth.onAuthStateChanged((authUser) => {
+      console.log("auth changed");
       // if someone logs in or logs out
       if (authUser) {
         dispatch({
@@ -40,7 +43,10 @@ function App() {
           <Route path="/signup">
             <Signup />
           </Route>
-
+          <Route path="/edit">
+            <HeaderMain />
+            <EditReview />
+          </Route>
           <Route path="/login">
             <Login />
           </Route>

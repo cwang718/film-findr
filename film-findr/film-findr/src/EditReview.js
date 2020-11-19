@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Star from "./icons/Star.svg";
-import "./CreateReview.css";
+import "./EditReview.css";
 import { useStateValue } from "./StateProvider";
 import { fireAuth, fireDb } from "./firebase";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
-function CreateReview() {
+function EditReview() {
   const [state, action] = useStateValue();
   const [selected, setSelected] = useState(0);
   const [myReview, setMyReview] = useState("");
+  const [oldReview, setOldReview] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
   const [movieInfo, setMovieInfo] = useState([]);
@@ -19,7 +20,12 @@ function CreateReview() {
       url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
       method: "GET",
     });
+    let response2 = await axios({
+      url: `https://${process.env.REACT_APP_FIREBASE_projectId}.firebaseio.com/users/${state.user.uid}/${state.movieId}/movieId.json`,
+      method: "GET",
+    });
     setMovieInfo(response.data);
+    setOldReview(response2.data);
   }, []);
 
   let imgUrl;
@@ -121,6 +127,7 @@ function CreateReview() {
               poster: imgUrl,
             },
           });
+        history.push("/onemovie");
       } catch (err) {
         setErrorMessage(err.message);
       }
@@ -128,8 +135,12 @@ function CreateReview() {
   };
 
   return (
-    <div>
-      <div className="createR">
+    <div className="testing">
+      <div className="movie__info">
+        <div className="moviename">{movieInfo.title}</div>
+        <img src={imgUrl} className="poster" alt="movie_poster" />
+      </div>
+      <div className="edit">
         <div className="createR__rating">
           <div className="createR__your__rating">
             {fiveStars(1)}
@@ -144,7 +155,9 @@ function CreateReview() {
           <textarea
             className="createR__textarea"
             id="create_review_text"
-            placeholder="Write a review"
+            placeholder={`You rated ${String(oldReview.movieTitle)} ${
+              oldReview.rating
+            } out of 5 stars and said " ${oldReview.review} "`}
             onChange={(e) => setMyReview(e.target.value)}
           ></textarea>
           <button className="signup__button" onClick={handleSubmit}>
@@ -157,4 +170,4 @@ function CreateReview() {
   );
 }
 
-export default CreateReview;
+export default EditReview;

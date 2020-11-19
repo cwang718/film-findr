@@ -6,8 +6,15 @@ import { Link, useHistory } from "react-router-dom";
 
 function MovieHomePage({ image, title, genres, rating, id }) {
   const history = useHistory();
-  const [tooBig, setTooBig] = useState(false);
+  const [tooBig, setTooBig] = useState("movie__title");
   const [state, dispatch] = useStateValue();
+
+  useEffect(() => {
+    if (title.length > 20) {
+      setTooBig("movie__title__small");
+    }
+  }, []);
+
   const linkToOneMovie = (e) => {
     //localStorage.setItem("movieId", 2);
     let movId = e.currentTarget.id;
@@ -35,7 +42,7 @@ function MovieHomePage({ image, title, genres, rating, id }) {
           onClick={linkToOneMovie}
         />
       </div>
-      <h1 className="movie__title">{title}</h1>
+      <h1 className={tooBig}>{title}</h1>
       <p className="movie__genres">{genres}</p>
     </div>
   );

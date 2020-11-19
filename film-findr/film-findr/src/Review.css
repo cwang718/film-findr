@@ -50,7 +50,6 @@
 }
 
 .reviewT__your__review {
-  min-height: 15rem;
   font-size: 1.2rem;
   font-family: "Montserrat", sans-serif;
   font-style: italic;
@@ -59,4 +58,9 @@
   padding-left: 1rem;
   padding-right: 1rem;
   border-radius: 10px 10px 10px 10px;
+}
+
+.reviewT__buttons {
+  display: flex;
+  justify-content: space-around;
 }

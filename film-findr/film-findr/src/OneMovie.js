@@ -11,7 +11,7 @@ import CreateReview from "./CreateReview";
 import { animations } from "react-animation";
 
 function OneMovie() {
-  const [state, action] = useStateValue(); // get movie id by state.movieId
+  const [state, dispatch] = useStateValue(); // get movie id by state.movieId
   const [movieInfo, setMovieInfo] = useState([]);
   const [cast, setCast] = useState([]);
   const [sign, setSign] = useState("");
@@ -20,19 +20,13 @@ function OneMovie() {
   const [count, setCount] = useState(0);
 
   let h = [];
-  let reloadMovie;
+
   const style = {
     animation: animations.fadeIn,
   };
 
   useEffect(async () => {
-    console.log(state.movieId);
-    if (state.movieId) {
-      reloadMovie = state.movieId;
-    } else {
-      reloadMovie = localStorage.movieId;
-      console.log(reloadMovie, "reload", "localStorage", localStorage.movieId);
-    }
+    console.log(state.movieId + "movieId", state.isEdited);
     if (!fireAuth.currentUser && localStorage.user == "null") {
       setSign("Sign in");
       setToreview("to see your reviewed movies");
@@ -41,7 +35,7 @@ function OneMovie() {
     if (fireAuth.currentUser) {
       try {
         fireDb
-          .ref("users/" + fireAuth.currentUser?.uid + "/" + reloadMovie)
+          .ref("users/" + fireAuth.currentUser?.uid + "/" + state.movieId)
           .on("value", (snapshot) => {
             snapshot.forEach((snap) => {
               h.push(snap.val());
@@ -53,7 +47,7 @@ function OneMovie() {
     } else {
       try {
         fireDb
-          .ref("users/" + localStorage.user + "/" + reloadMovie)
+          .ref("users/" + localStorage.user + "/" + state.movieId)
           .on("value", (snapshot) => {
             snapshot.forEach((snap) => {
               h.push(snap.val());
@@ -66,17 +60,22 @@ function OneMovie() {
       }
     }
     let response = await axios({
-      url: `https://api.themoviedb.org/3/movie/${reloadMovie}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
       method: "GET",
     });
 
     let response2 = await axios({
-      url: `https://api.themoviedb.org/3/movie/${reloadMovie}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      url: `https://api.themoviedb.org/3/movie/${state.movieId}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
       method: "GET",
     });
     setMovieInfo(response.data);
     setCast(response2.data);
-  }, []);
+  }, [state.movieId, state.isEdited]);
+
+  // if (state.movieId === null) {
+  //   console.log(state);
+  //   return <div>loading...</div>;
+  // }
   let imgUrl;
   if (movieInfo.poster_path) {
     imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
@@ -123,6 +122,7 @@ function OneMovie() {
   };
 
   const test = () => {
+    console.log(movies.length, state.isEdited);
     if (!fireAuth.currentUser && localStorage.user == "null") {
       return (
         <span className="review__spans">
@@ -136,22 +136,19 @@ function OneMovie() {
     if (movies.length !== 0) {
       return (
         <div className="review__true">
-          <Review rating={movies[0].rating} review={movies[0].review} />
+          <Review
+            rating={movies[0].rating}
+            review={movies[0].review}
+            title={movies[0].movieTitle}
+            image={movies[0].poster}
+          />
         </div>
       );
     } else {
-      return (
-        <CreateReview
-          movieId={state.movieId ? state.movieId : localStorage.movieId}
-        />
-      );
+      return <CreateReview />;
     }
   };
 
-  if (state.movieId === null) {
-    console.log("loading");
-    return <div>loading...</div>;
-  }
   return (
     <div className="onemovie" style={style}>
       <div className="home">

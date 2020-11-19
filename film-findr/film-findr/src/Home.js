@@ -30,14 +30,15 @@ function Home() {
 
   //.map((genre) => " " + genre.name)
   //.toString();
+
   return (
     <div className="home">
       <div className="home__container">
         <img className="home__image" src="./lights.png" alt="" />
-        <div className="grid-container" style={style}>
+        <div className="grid-container">
           {popularMoviesInfo.map(
             ({ title, poster_path, genre_ids, vote_average, id }) => (
-              <div className="grid-item">
+              <div className="grid-item" style={style}>
                 <MovieHomePage
                   id={id}
                   title={title}

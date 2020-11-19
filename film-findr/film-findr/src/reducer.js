@@ -2,6 +2,7 @@ export const initialState = {
   reviews: [],
   user: null,
   movieId: null,
+  isEdited: false,
 };
 
 const reducer = (state, action) => {
@@ -24,6 +25,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         movieId: action.movieId,
+      };
+
+    case "SET_EDIT":
+      return {
+        ...state,
+        isEdited: action.isEdited,
       };
 
     default:

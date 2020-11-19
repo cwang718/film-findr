@@ -1,11 +1,22 @@
-.createR {
+.edit {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin-top: -7.5rem;
-  background-repeat: no-repeat;
-  background-size: cover;
-  margin-bottom: 2rem;
+  margin-top: 2rem;
+
+  background-color: #2c2c2c;
+}
+.testing {
+  background-color: #2c2c2c;
+  display: flex;
+  justify-content: space-around;
+  height: 100vh;
+}
+.movie__info {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #2c2c2c;
 }
 
 .createR__rating {
@@ -61,13 +72,6 @@
 }
 
 .createR__star__yellow {
-  filter: invert(99%) sepia(80%) saturate(2993%) hue-rotate(348deg)
-    brightness(109%) contrast(106%);
-  width: 40px;
-  object-fit: contain;
-}
-
-.createR__star__yellow__light {
   filter: invert(99%) sepia(80%) saturate(2993%) hue-rotate(348deg)
     brightness(109%) contrast(106%);
   width: 40px;

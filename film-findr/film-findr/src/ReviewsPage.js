@@ -5,13 +5,12 @@ import { fireAuth, fireDb } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import { animations } from "react-animation";
 import { Link } from "react-router-dom";
+import Loading from "./Loading";
 
 function ReviewsPage() {
   // get firebase movies collection
-  const [{ reviews, user }, dispatch] = useStateValue();
-  const [critique, setCritique] = useState([]);
+  const [{ reviews, user, movieId }, dispatch] = useStateValue();
   const [movies, setMovies] = useState([]);
-  const [member, setMember] = useState([]);
   const [sign, setSign] = useState("");
   const [toreview, setToreview] = useState("");
   const [count, setCount] = useState(0);
@@ -67,6 +66,7 @@ function ReviewsPage() {
   const style = {
     animation: animations.fadeIn,
   };
+
   return (
     <div className="reviewsPage">
       <img className="review__lights" src="./lights.png" alt="" />
