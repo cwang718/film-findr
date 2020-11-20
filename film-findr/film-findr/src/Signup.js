@@ -16,12 +16,6 @@ function Signup() {
       .then((auth) => {
         if (auth) {
           // if there is a user
-          fireDb.ref("users/" + auth.user.uid).set({
-            155: { rating: 3, review: "this is the dark knight" },
-            warwrwyaw: { rating: 1, review: "bad movie" },
-            anothermovieid: { rating: 5, review: "great" },
-          });
-
           localStorage.setItem("user", auth.user.uid);
           history.push("./");
         }

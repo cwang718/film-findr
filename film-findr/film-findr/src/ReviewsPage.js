@@ -23,7 +23,6 @@ function ReviewsPage() {
     }
     if (fireAuth.currentUser) {
       try {
-        console.log("users/" + fireAuth.currentUser?.uid, "fireAuth");
         fireDb
           .ref("users/" + fireAuth.currentUser?.uid)
           .on("value", (snapshot) => {
@@ -43,7 +42,6 @@ function ReviewsPage() {
       } catch {}
     } else {
       try {
-        console.log("users/" + localStorage.user, "localStorage");
         fireDb.ref("users/" + localStorage.user).on("value", (snapshot) => {
           snapshot.forEach((snap) => {
             h.push(snap.val());

@@ -6,8 +6,7 @@ export const initialState = {
 };
 
 const reducer = (state, action) => {
-  //console.log(action);
-  //console.log(`State is now: ${state} with the user: ${state.user}`);
+  
   switch (action.type) {
     case "ADD_REVIEW":
       return {

@@ -2,20 +2,14 @@ import { debounce } from "debounce";
 export default function autocomplete(input, array) {
   if (array) {
     let curFocus;
-    console.log(
-      array.map((movies) => movies.title),
-      "outside"
-    );
+    
     function createACList(arr) {
-      console.log(
-        arr.map((movies) => movies.title),
-        "inside"
-      );
+      
       let a,
         b,
         i,
         val = document.getElementById("myInput").value.toUpperCase();
-      console.log(val);
+     
       curFocus = -1;
       //Closes any open list of autocomplete values
       closeAllLists();
@@ -30,7 +24,7 @@ export default function autocomplete(input, array) {
       document.getElementById("myInput").parentNode.appendChild(a);
 
       for (i = 0; i < arr.length; i++) {
-        console.log("in for loop: " + arr[i].title + i);
+        
         //Check if item starts with same letters as text field value
         if (
           arr[i].title.substring(0, val.length).toUpperCase() ===
@@ -74,7 +68,7 @@ export default function autocomplete(input, array) {
       }
     }
     function dbounce() {
-      console.log(array);
+
       createACList(array);
     }
     input.addEventListener("input", debounce(dbounce, 500));

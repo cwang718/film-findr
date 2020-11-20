@@ -26,7 +26,7 @@ function OneMovie() {
   };
 
   useEffect(async () => {
-    console.log(state.movieId + "movieId", state.isEdited);
+
     if (!fireAuth.currentUser && localStorage.user == "null") {
       setSign("Sign in");
       setToreview("to see your reviewed movies");
@@ -56,7 +56,7 @@ function OneMovie() {
             setCount(h.length);
           });
       } catch {
-        //console.log("no review");
+
       }
     }
     let response = await axios({
@@ -72,10 +72,7 @@ function OneMovie() {
     setCast(response2.data);
   }, [state.movieId, state.isEdited]);
 
-  // if (state.movieId === null) {
-  //   console.log(state);
-  //   return <div>loading...</div>;
-  // }
+
   let imgUrl;
   if (movieInfo.poster_path) {
     imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
@@ -122,7 +119,6 @@ function OneMovie() {
   };
 
   const test = () => {
-    console.log(movies.length, state.isEdited);
     if (!fireAuth.currentUser && localStorage.user == "null") {
       return (
         <span className="review__spans">

@@ -25,10 +25,7 @@ function MovieHomePage({ image, title, genres, rating, id }) {
     });
     history.push("/onemovie");
   };
-  // console.log(state.user);
-  // if (state.user === null) {
-  //   return <div>loading</div>;
-  // }
+ 
 
   return (
     <div className="movie">

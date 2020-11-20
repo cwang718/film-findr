@@ -21,7 +21,7 @@ function App() {
   const [{}, dispatch] = useStateValue();
   useEffect(() => {
     fireAuth.onAuthStateChanged((authUser) => {
-      console.log("auth changed");
+
       // if someone logs in or logs out
       if (authUser) {
         dispatch({

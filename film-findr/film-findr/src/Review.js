@@ -24,8 +24,6 @@ function Review({ rating, review, image, title }) {
       type: "SET_EDIT",
       isEdited: !state.isEdited,
     });
-    console.log(state.isEdited);
-    //history.push("./reviews");
   }
 
   return (

@@ -14,11 +14,10 @@ function HeaderMain() {
   const [state, action] = useStateValue(); // get user by state.user and get reviews by state.reviews
   const history = useHistory();
   const handleLogInOrReviews = () => {
-    console.log(state.user);
-    console.log(process.env.REACT_APP_FIREBASE_apiKey, "api key");
+ 
     if (state.user) {
       // is there someone logged in????
-      console.log(state.user);
+    
       // go to reviews page
       history.push("./reviews"); //redirect to the reviews path
     } else {
@@ -29,7 +28,7 @@ function HeaderMain() {
   const handleCreateOrLogOut = () => {
     if (state.user) {
       // is there someone logged in????
-      console.log(state.user);
+  
       fireAuth.signOut();
       localStorage.setItem("user", null);
       history.push("./");

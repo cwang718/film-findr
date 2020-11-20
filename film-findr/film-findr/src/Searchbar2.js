@@ -18,10 +18,7 @@ async function httpGetMovies(title) {
     method: "GET",
     url: searchUrl + title,
   });
-  console.log(
-    response.data.results.map((title) => title.title),
-    title
-  );
+  
   // let response = fetch(searchUrl + title)
   //   .then((response) => response.json())
   //   .then((data) => data.results);
@@ -34,7 +31,6 @@ const autocomplete = (arr) => {
     b,
     i,
     val = document.getElementById("myInput").value.toUpperCase();
-  console.log(val);
   curFocus = -1;
   //Closes any open list of autocomplete values
   closeAllLists();
@@ -173,11 +169,8 @@ const autocomplete = (arr) => {
 };
 
 async function getHttpAndSearch() {
-  console.log("api call");
   let word = document.getElementById("myInput").value;
   await httpGetMovies(word).then((result) => autocomplete(result));
-  console.log("finished debouncing");
-
   // autocomplete(document.getElementById("myInput"), searchtitle);
 }
 
