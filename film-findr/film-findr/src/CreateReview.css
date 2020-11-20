@@ -66,10 +66,3 @@
   width: 40px;
   object-fit: contain;
 }
-
-.createR__star__yellow__light {
-  filter: invert(99%) sepia(80%) saturate(2993%) hue-rotate(348deg)
-    brightness(109%) contrast(106%);
-  width: 40px;
-  object-fit: contain;
-}
