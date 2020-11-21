@@ -1,11 +1,6 @@
 import "./App.css";
 import React, { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./Home";
 import HeaderMain from "./HeaderMain";
 import Login from "./Login";
@@ -14,7 +9,6 @@ import ReviewsPage from "./ReviewsPage";
 import { fireAuth } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import OneMovie from "./OneMovie.js";
-import CreateReview from "./CreateReview.js";
 import EditReview from "./EditReview.js";
 import Loading from "./Loading";
 
@@ -44,7 +38,6 @@ function App() {
             <Signup />
           </Route>
           <Route path="/edit/:film_id">
-            <HeaderMain />
             <EditReview />
           </Route>
           <Route path="/login">

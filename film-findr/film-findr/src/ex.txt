@@ -1226,3 +1226,1102 @@ function OneMovie() {
 }
 
 export default OneMovie;
+
+
+import React, { useState } from "react";
+import SearchIcon from "./icons/SearchIcon.svg";
+// import autocomplete from "./Autocomplete.js";
+import { Link } from "react-router-dom";
+import { useStateValue } from "./StateProvider";
+import { debounce } from "debounce";
+import "./HeaderMain.css";
+import "./Searchbar.css";
+import axios from "axios";
+
+const searchUrl =
+  "https://api.themoviedb.org/3/search/movie?api_key=" +
+  process.env.REACT_APP_FIREBASE_imdb +
+  "&query=";
+
+async function httpGetMovies(title) {
+  let response = await axios({
+    method: "GET",
+    url: searchUrl + title,
+  });
+  
+  // let response = fetch(searchUrl + title)
+  //   .then((response) => response.json())
+  //   .then((data) => data.results);
+  return response.data.results; //returns array of movies
+}
+
+const autocomplete = (arr) => {
+  let curFocus;
+  let a,
+    b,
+    i,
+    val = document.getElementById("myInput").value.toUpperCase();
+  curFocus = -1;
+  //Closes any open list of autocomplete values
+  closeAllLists();
+  if (!val) {
+    return false;
+  }
+  a = document.createElement("div");
+
+  //div that contains suggestions
+  a.setAttribute(
+    "id",
+    document.getElementById("myInput").id + "autocomplete-list"
+  );
+  a.setAttribute("class", "autocomplete-items");
+  document.getElementById("myInput").parentNode.appendChild(a);
+
+  for (i = 0; i < arr.length; i++) {
+    //Check if item starts with same letters as text field value
+    if (
+      arr[i].title.substring(0, val.length).toUpperCase() === val.toUpperCase()
+    ) {
+      //Make div for matching element
+      b = document.createElement("div");
+      //Make matching letters bold
+      b.innerHTML =
+        "<strong>" + arr[i].title.substring(0, val.length) + "</strong>";
+      b.innerHTML += arr[i].title.substring(val.length);
+      b.innerHTML += "  (" + arr[i].release_date.substring(0, 4) + ")";
+      //Make new input field that holds current arrr item's value
+      b.innerHTML +=
+        "<input type='hidden' value='" +
+        arr[i].title +
+        " (" +
+        arr[i].release_date.substring(0, 4) +
+        ")' data-mid=" +
+        arr[i].id +
+        ">";
+      //Execute function when someone clicks on a suggestion
+      b.addEventListener("click", function (e) {
+        //Insert value for autocomplete text field
+        document.getElementById("myInput").value = this.children[1].value;
+        //Close list of autocompleted values
+        closeAllLists();
+        //Returns data-mid with the movie id
+        // return this.children[1].getAttribute("data-mid");
+        let mid = this.children[1].getAttribute("data-mid");
+        document.getElementById("myInput").setAttribute("data-mid", mid);
+      });
+      a.appendChild(b);
+    }
+  }
+
+  //Execute a function on keypresses
+  let fired = false;
+  document.getElementById("myInput").addEventListener("keydown", function (e) {
+    if (!fired) {
+      fired = true;
+      let x = document.getElementById(
+        document.getElementById("myInput").id + "autocomplete-list"
+      );
+      if (x) {
+        x = x.getElementsByTagName("div");
+      }
+      if (e.keyCode === 40) {
+        //Down key press => increase curFocus
+        curFocus++;
+        //Make current item more visible
+        addActive(x);
+      } else if (e.keyCode === 38) {
+        //Up key press => decrease curFocus
+        curFocus--;
+        //Make current item more visible
+        addActive(x);
+      } else if (e.keyCode === 13) {
+        //Enter key is pressed, prevent form from being submitted
+        e.preventDefault();
+        if (curFocus > -1) {
+          //Simulate a click on active item
+          if (x) {
+            x[curFocus].click();
+            // return x[curFocus].children[1].getAttribute("data-mid");
+            document
+              .getElementById("myInput")
+              .setAttribute(
+                "data-mid",
+                x[curFocus].children[1].getAttribute("data-mid")
+              );
+          }
+        }
+      }
+    }
+  });
+  // a.appendChild(b);
+
+  document.getElementById("myInput").addEventListener("keyup", function (e) {
+    fired = false;
+  });
+
+  function addActive(x) {
+    //Function to classify if item is active
+    if (!x) {
+      return false;
+    }
+    removeActive(x);
+    if (curFocus >= x.length) {
+      curFocus = 0;
+    }
+    if (curFocus < 0) {
+      curFocus = x.length - 1;
+    }
+
+    //Add class "autocomplete-active"
+    x[curFocus].classList.add("autocomplete-active");
+  }
+
+  function removeActive(x) {
+    //Function to remove active class from autocomplete list
+    for (let i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+
+  function closeAllLists(elt) {
+    //Close all autocomplete lists
+    let x = document.getElementsByClassName("autocomplete-items");
+    for (let i = 0; i < x.length; i++) {
+      if (elt !== x[i] && elt !== document.getElementById("myInput")) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    closeAllLists(e.target);
+  });
+};
+
+async function getHttpAndSearch() {
+  let word = document.getElementById("myInput").value;
+  await httpGetMovies(word).then((result) => autocomplete(result));
+  // autocomplete(document.getElementById("myInput"), searchtitle);
+}
+
+function Searchbar2() {
+  const [search, setSearch] = useState("");
+  const [state, dispatch] = useStateValue();
+  return (
+    <div className="header__search">
+      <form autoComplete="off">
+        <p className="autocomplete">
+          <input
+            className="header__searchInput"
+            id="myInput"
+            type="text"
+            data-mid=""
+            onChange={debounce(getHttpAndSearch, 500)}
+            placeholder="search for a movie..."
+          />
+        </p>
+      </form>
+      <Link to="/onemovie">
+        <button
+          className="searchbutton header__searchIcon"
+          onClick={function () {
+            let mid = document
+              .getElementById("myInput")
+              .getAttribute("data-mid");
+            dispatch({
+              type: "SET_MOVIE_ID",
+              movieId: mid,
+            });
+            localStorage.setItem("movieId", mid);
+          }}
+        >
+          <img src={SearchIcon} id="searchicon" alt="search" />
+        </button>
+      </Link>
+    </div>
+  );
+}
+
+export default Searchbar2;
+
+
+
+
+
+
+
+
+AFTER URL PATHS
+
+import React, { useEffect, useState } from "react";
+import Star from "./icons/Star.svg";
+import "./EditReview.css";
+import { useStateValue } from "./StateProvider";
+import { fireAuth, fireDb } from "./firebase";
+import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
+
+function EditReview() {
+  const [state, action] = useStateValue();
+  const [selected, setSelected] = useState(0);
+  const [myReview, setMyReview] = useState("");
+  const [oldReview, setOldReview] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const history = useHistory();
+  const [movieInfo, setMovieInfo] = useState([]);
+
+  useEffect(async () => {
+    let response = await axios({
+      url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      method: "GET",
+    });
+    let response2 = await axios({
+      url: `https://${process.env.REACT_APP_FIREBASE_projectId}.firebaseio.com/users/${state.user.uid}/${state.movieId}/movieId.json`,
+      method: "GET",
+    });
+    setMovieInfo(response.data);
+    setOldReview(response2.data);
+  }, []);
+
+  let imgUrl;
+  if (movieInfo.poster_path) {
+    imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
+  } else {
+    imgUrl = "./error.png";
+  }
+
+  const changeColor = (e) => {
+    if (selected !== 0) {
+      return;
+    }
+
+    let stars = [
+      document.getElementById(`1star`),
+      document.getElementById(`2star`),
+      document.getElementById(`3star`),
+      document.getElementById(`4star`),
+      document.getElementById(`5star`),
+    ];
+    let cId = e.currentTarget.id;
+    let realId = cId.slice(0, 1);
+    let h = Number(realId);
+    if (
+      h == 1 &&
+      stars[0].classList.contains("createR__star__yellow") &&
+      !stars[1].classList.contains("createR__star__yellow") &&
+      !stars[2].classList.contains("createR__star__yellow") &&
+      !stars[3].classList.contains("createR__star__yellow") &&
+      !stars[4].classList.contains("createR__star__yellow")
+    ) {
+      stars[0].classList.remove("createR__star__yellow");
+    } else {
+      for (let i = 0; i < 5; i++) {
+        if (i <= h - 1) {
+          stars[i].classList.add("createR__star__yellow");
+        } else {
+          stars[i].classList.remove("createR__star__yellow");
+        }
+      }
+    }
+  };
+
+  const select = (e) => {
+    let cId = e.currentTarget.id;
+    let realId = cId.slice(0, 1);
+    let h = Number(realId);
+
+    setSelected(h);
+
+    let stars = [
+      document.getElementById(`1star`),
+      document.getElementById(`2star`),
+      document.getElementById(`3star`),
+      document.getElementById(`4star`),
+      document.getElementById(`5star`),
+    ];
+    for (let i = 0; i < 5; i++) {
+      if (i < h) {
+        if (!stars[i].classList.contains("createR__star__yellow")) {
+          stars[i].classList.add("createR__star__yellow");
+        }
+      } else {
+        if (stars[i].classList.contains("createR__star__yellow")) {
+          stars[i].classList.remove("createR__star__yellow");
+        }
+      }
+    }
+  };
+
+  const fiveStars = (index) => {
+    return (
+      <img
+        src={Star}
+        className={`createR__star`}
+        id={`${index}star`}
+        alt="star"
+        onMouseOver={changeColor}
+        onClick={select}
+      />
+    );
+  };
+
+  const handleSubmit = () => {
+    if (myReview.length == 0) {
+      setErrorMessage("Type something in the box first!");
+    } else if (selected == 0) {
+      setErrorMessage("Rate the movie using the stars!");
+    } else {
+      try {
+        fireDb
+          .ref("users/" + fireAuth.currentUser?.uid + "/" + state.movieId)
+          .set({
+            movieId: {
+              rating: selected,
+              review: myReview,
+              movieTitle: movieInfo.title,
+              poster: imgUrl,
+            },
+          });
+        history.push("/onemovie/" + state.movieId);
+      } catch (err) {
+        setErrorMessage(err.message);
+      }
+    }
+  };
+
+  return (
+    <div className="testing">
+      <div className="movie__info">
+        <div className="moviename">{movieInfo.title}</div>
+        <img src={imgUrl} className="poster" alt="movie_poster" />
+      </div>
+      <div className="edit">
+        <div className="createR__rating">
+          <div className="createR__your__rating">
+            {fiveStars(1)}
+            {fiveStars(2)}
+            {fiveStars(3)}
+            {fiveStars(4)}
+            {fiveStars(5)}
+          </div>
+        </div>
+        <div className="createR__text__container">
+          {}
+          <textarea
+            className="createR__textarea"
+            id="create_review_text"
+            placeholder={`You rated ${String(oldReview.movieTitle)} ${
+              oldReview.rating
+            } out of 5 stars and said " ${oldReview.review} "`}
+            onChange={(e) => setMyReview(e.target.value)}
+          ></textarea>
+          <button className="signup__button" onClick={handleSubmit}>
+            Save Review
+          </button>
+          <span className="signup__error">{errorMessage}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default EditReview;
+
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import "./HeaderMain.css";
+import SearchIcon from "./icons/SearchIcon.svg";
+import { useStateValue } from "./StateProvider";
+import { fireAuth } from "./firebase";
+import { animations } from "react-animation";
+import Searchbar2 from "./Searchbar2.js";
+
+function HeaderMain() {
+  const style = {
+    animation: animations.fadeIn,
+  };
+  const [state, action] = useStateValue(); // get user by state.user and get reviews by state.reviews
+  const history = useHistory();
+  const handleLogInOrReviews = () => {
+    if (state.user) {
+      // is there someone logged in????
+
+      // go to reviews page
+      history.push("./reviews"); //redirect to the reviews path
+    } else {
+      history.push("./login");
+    }
+  };
+
+  const handleCreateOrLogOut = () => {
+    if (state.user) {
+      // is there someone logged in????
+
+      fireAuth.signOut();
+      localStorage.setItem("user", null);
+      history.push("./");
+      // go to reviews page
+    } else {
+      history.push("./signup");
+    }
+  };
+  return (
+    <div className="header">
+      <Link to="/">
+        <img
+          className="header__logo"
+          src="logomovie.png"
+          alt="logo"
+          style={style}
+        />
+      </Link>
+
+      <Searchbar2></Searchbar2>
+
+      <div className="header__nav" style={style}>
+        <div onClick={handleLogInOrReviews} className="header__option">
+          <span className="header__optionLog">
+            {!state.user ? "log in" : "reviews"}
+          </span>
+        </div>
+
+        <div onClick={handleCreateOrLogOut} className="header__option">
+          <span className="header__optionSign">
+            {!state.user ? "create account" : "log out"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default HeaderMain;
+
+import React, { useEffect, useState } from "react";
+import "./MovieHomePage.css";
+import { fireAuth, fireDb } from "./firebase";
+import { useStateValue } from "./StateProvider";
+import { Link, useHistory, useParams } from "react-router-dom";
+
+function MovieHomePage({ image, title, genres, rating, id }) {
+  const history = useHistory();
+  const [tooBig, setTooBig] = useState("movie__title");
+  const [state, dispatch] = useStateValue();
+
+  useEffect(() => {
+    if (title.length > 20) {
+      setTooBig("movie__title__small");
+    }
+  }, []);
+
+  const linkToOneMovie = (e) => {
+    //localStorage.setItem("movieId", 2);
+    let movId = e.currentTarget.id;
+    //localStorage.setItem("movieId", movId);
+    dispatch({
+      type: "SET_MOVIE_ID",
+      movieId: movId,
+    });
+    history.push("/onemovie/" + movId);
+  };
+
+  return (
+    <div className="movie">
+      <div className="movie__rating">
+        <span>{rating}</span>
+        <img
+          className="star"
+          src={image}
+          alt="movie_poster"
+          id={id}
+          onClick={linkToOneMovie}
+        />
+      </div>
+      <h1 className={tooBig}>{title}</h1>
+      <p className="movie__genres">{genres}</p>
+    </div>
+  );
+}
+
+export default MovieHomePage;
+
+
+import React, { useState } from "react";
+import SearchIcon from "./icons/SearchIcon.svg";
+// import autocomplete from "./Autocomplete.js";
+import { Link, useHistory } from "react-router-dom";
+import { useStateValue } from "./StateProvider";
+import { debounce } from "debounce";
+import "./HeaderMain.css";
+import "./Searchbar.css";
+import axios from "axios";
+
+const searchUrl =
+  "https://api.themoviedb.org/3/search/movie?api_key=" +
+  process.env.REACT_APP_FIREBASE_imdb +
+  "&query=";
+
+async function httpGetMovies(title) {
+  let response = await axios({
+    method: "GET",
+    url: searchUrl + title,
+  });
+
+  // let response = fetch(searchUrl + title)
+  //   .then((response) => response.json())
+  //   .then((data) => data.results);
+  return response.data.results; //returns array of movies
+}
+
+const autocomplete = (arr) => {
+  let curFocus;
+  let a,
+    b,
+    i,
+    val = document.getElementById("myInput").value.toUpperCase();
+  curFocus = -1;
+  //Closes any open list of autocomplete values
+  closeAllLists();
+  if (!val) {
+    return false;
+  }
+  a = document.createElement("div");
+
+  //div that contains suggestions
+  a.setAttribute(
+    "id",
+    document.getElementById("myInput").id + "autocomplete-list"
+  );
+  a.setAttribute("class", "autocomplete-items");
+  document.getElementById("myInput").parentNode.appendChild(a);
+
+  for (i = 0; i < arr.length; i++) {
+    //Check if item starts with same letters as text field value
+    if (
+      arr[i].title.substring(0, val.length).toUpperCase() === val.toUpperCase()
+    ) {
+      //Make div for matching element
+      b = document.createElement("div");
+      //Make matching letters bold
+      b.innerHTML =
+        "<strong>" + arr[i].title.substring(0, val.length) + "</strong>";
+      b.innerHTML += arr[i].title.substring(val.length);
+      b.innerHTML += "  (" + arr[i].release_date.substring(0, 4) + ")";
+      //Make new input field that holds current arrr item's value
+      b.innerHTML +=
+        "<input type='hidden' value='" +
+        arr[i].title +
+        " (" +
+        arr[i].release_date.substring(0, 4) +
+        ")' data-mid=" +
+        arr[i].id +
+        ">";
+      //Execute function when someone clicks on a suggestion
+      b.addEventListener("click", function (e) {
+        //Insert value for autocomplete text field
+        document.getElementById("myInput").value = this.children[1].value;
+        //Close list of autocompleted values
+        closeAllLists();
+        //Returns data-mid with the movie id
+        // return this.children[1].getAttribute("data-mid");
+        let mid = this.children[1].getAttribute("data-mid");
+        document.getElementById("myInput").setAttribute("data-mid", mid);
+      });
+      a.appendChild(b);
+    }
+  }
+
+  //Execute a function on keypresses
+  let fired = false;
+  document.getElementById("myInput").addEventListener("keydown", function (e) {
+    if (!fired) {
+      fired = true;
+      let x = document.getElementById(
+        document.getElementById("myInput").id + "autocomplete-list"
+      );
+      if (x) {
+        x = x.getElementsByTagName("div");
+      }
+      if (e.keyCode === 40) {
+        //Down key press => increase curFocus
+        curFocus++;
+        //Make current item more visible
+        addActive(x);
+      } else if (e.keyCode === 38) {
+        //Up key press => decrease curFocus
+        curFocus--;
+        //Make current item more visible
+        addActive(x);
+      } else if (e.keyCode === 13) {
+        //Enter key is pressed, prevent form from being submitted
+        e.preventDefault();
+        if (curFocus > -1) {
+          //Simulate a click on active item
+          if (x) {
+            x[curFocus].click();
+            // return x[curFocus].children[1].getAttribute("data-mid");
+            document
+              .getElementById("myInput")
+              .setAttribute(
+                "data-mid",
+                x[curFocus].children[1].getAttribute("data-mid")
+              );
+          }
+        }
+      }
+    }
+  });
+  // a.appendChild(b);
+
+  document.getElementById("myInput").addEventListener("keyup", function (e) {
+    fired = false;
+  });
+
+  function addActive(x) {
+    //Function to classify if item is active
+    if (!x) {
+      return false;
+    }
+    removeActive(x);
+    if (curFocus >= x.length) {
+      curFocus = 0;
+    }
+    if (curFocus < 0) {
+      curFocus = x.length - 1;
+    }
+
+    //Add class "autocomplete-active"
+    x[curFocus].classList.add("autocomplete-active");
+  }
+
+  function removeActive(x) {
+    //Function to remove active class from autocomplete list
+    for (let i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+
+  function closeAllLists(elt) {
+    //Close all autocomplete lists
+    let x = document.getElementsByClassName("autocomplete-items");
+    for (let i = 0; i < x.length; i++) {
+      if (elt !== x[i] && elt !== document.getElementById("myInput")) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+
+  document.addEventListener("click", function (e) {
+    closeAllLists(e.target);
+  });
+};
+
+async function getHttpAndSearch() {
+  let word = document.getElementById("myInput").value;
+  await httpGetMovies(word).then((result) => autocomplete(result));
+  // autocomplete(document.getElementById("myInput"), searchtitle);
+}
+
+function Searchbar2() {
+  const [search, setSearch] = useState("");
+  const [state, dispatch] = useStateValue();
+  const history = useHistory();
+  return (
+    <div className="header__search">
+      <form autoComplete="off">
+        <p className="autocomplete">
+          <input
+            className="header__searchInput"
+            id="myInput"
+            type="text"
+            data-mid=""
+            onChange={debounce(getHttpAndSearch, 500)}
+            placeholder="search for a movie..."
+          />
+        </p>
+      </form>
+      <button
+        className="searchbutton header__searchIcon"
+        onClick={function () {
+          let mid = document.getElementById("myInput").getAttribute("data-mid");
+          dispatch({
+            type: "SET_MOVIE_ID",
+            movieId: mid,
+          });
+          localStorage.setItem("movieId", mid);
+          history.push("./onemovie/" + mid);
+        }}
+      >
+        <img src={SearchIcon} id="searchicon" alt="search" />
+      </button>
+    </div>
+  );
+}
+
+export default Searchbar2;
+
+
+import "./App.css";
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
+import Home from "./Home";
+import HeaderMain from "./HeaderMain";
+import Login from "./Login";
+import Signup from "./Signup";
+import ReviewsPage from "./ReviewsPage";
+import { fireAuth } from "./firebase";
+import { useStateValue } from "./StateProvider";
+import OneMovie from "./OneMovie.js";
+import CreateReview from "./CreateReview.js";
+import EditReview from "./EditReview.js";
+
+function App() {
+  const [{}, dispatch] = useStateValue();
+  useEffect(() => {
+    fireAuth.onAuthStateChanged((authUser) => {
+      // if someone logs in or logs out
+      if (authUser) {
+        dispatch({
+          type: "SET_USER",
+          user: authUser,
+        });
+      } else {
+        dispatch({
+          type: "SET_USER",
+          user: null,
+        });
+      }
+    });
+  }, []);
+  return (
+    <div className="app">
+      <Router>
+        <Switch>
+          <Route path="/signup">
+            <Signup />
+          </Route>
+          <Route path="/edit">
+            <HeaderMain />
+            <EditReview />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+
+          <Route exact path="/reviews">
+            <HeaderMain />
+            <ReviewsPage />
+          </Route>
+
+          <Route path="/onemovie/:id">
+            <HeaderMain />
+            <OneMovie />
+          </Route>
+
+          <Route exact path="/">
+            <HeaderMain />
+            <Home />
+          </Route>
+        </Switch>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
+
+
+import React, { useEffect, useState } from "react";
+import HeaderMain from "./HeaderMain";
+import { useStateValue } from "./StateProvider";
+import { fireAuth, fireDb } from "./firebase";
+import axios from "axios";
+import "./Home.css";
+import "./OneMovie.css";
+import { Link, useParams } from "react-router-dom";
+import Review from "./Review";
+import CreateReview from "./CreateReview";
+import { animations } from "react-animation";
+
+function OneMovie() {
+  const [state, dispatch] = useStateValue(); // get movie id by state.movieId
+  const [movieInfo, setMovieInfo] = useState([]);
+  const [cast, setCast] = useState([]);
+  const [sign, setSign] = useState("");
+  const [toreview, setToreview] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [count, setCount] = useState(0);
+  const { film_id } = useParams();
+
+  let h = [];
+
+  const style = {
+    animation: animations.fadeIn,
+  };
+
+  useEffect(async () => {
+    console.log(film_id);
+    if (!fireAuth.currentUser && localStorage.user == "null") {
+      setSign("Sign in");
+      setToreview("to see your reviewed movies");
+    }
+
+    if (fireAuth.currentUser) {
+      try {
+        fireDb
+          .ref("users/" + fireAuth.currentUser?.uid + "/" + state.movieId)
+          .on("value", (snapshot) => {
+            snapshot.forEach((snap) => {
+              h.push(snap.val());
+            });
+            setMovies(h);
+            setCount(h.length);
+          });
+      } catch {
+        console.log("film_id");
+        fireDb
+          .ref("users/" + fireAuth.currentUser?.uid + "/" + film_id)
+          .on("value", (snapshot) => {
+            snapshot.forEach((snap) => {
+              h.push(snap.val());
+            });
+            setMovies(h);
+            setCount(h.length);
+          });
+      }
+    } else {
+      try {
+        fireDb
+          .ref("users/" + localStorage.user + "/" + state.movieId)
+          .on("value", (snapshot) => {
+            snapshot.forEach((snap) => {
+              h.push(snap.val());
+            });
+            setMovies(h);
+            setCount(h.length);
+          });
+      } catch {
+        console.log("film_id");
+        fireDb
+          .ref("users/" + localStorage.user + "/" + film_id)
+          .on("value", (snapshot) => {
+            snapshot.forEach((snap) => {
+              h.push(snap.val());
+            });
+            setMovies(h);
+            setCount(h.length);
+          });
+      }
+    }
+    try {
+      let response = await axios({
+        url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
+
+      let response2 = await axios({
+        url: `https://api.themoviedb.org/3/movie/${state.movieId}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
+      setMovieInfo(response.data);
+      setCast(response2.data);
+    } catch (err) {
+      let response = await axios({
+        url: `https://api.themoviedb.org/3/movie/${film_id}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
+
+      let response2 = await axios({
+        url: `https://api.themoviedb.org/3/movie/${film_id}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
+      setMovieInfo(response.data);
+      setCast(response2.data);
+    }
+  }, [state.movieId, state.isEdited]);
+
+  let imgUrl;
+  if (movieInfo.poster_path) {
+    imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
+  } else {
+    imgUrl = "./error.png";
+  }
+
+  const genres = () => {
+    try {
+      return movieInfo.genres
+        .slice(0, 3)
+        .map((genre) => " " + genre.name)
+        .toString();
+    } catch {
+      return "no genres found";
+    }
+  };
+
+  const actors = () => {
+    try {
+      return cast.cast
+        .map((actor) => actor.name)
+        .slice(0, 3)
+        .map((genre) => " " + genre)
+        .toString();
+    } catch {
+      return "no actors found in the database";
+    }
+  };
+
+  const director = () => {
+    try {
+      return cast.crew.find((c) => c.job === "Director").name;
+    } catch {
+      return "no director found in the database";
+    }
+  };
+  const overview = () => {
+    try {
+      return movieInfo.overview;
+    } catch {
+      return "no plot summary found in the database";
+    }
+  };
+
+  const test = () => {
+    if (!fireAuth.currentUser && localStorage.user == "null") {
+      return (
+        <span className="review__spans">
+          <Link to="/login" style={{ color: "#a19ff2" }}>
+            {sign}
+          </Link>{" "}
+          <span className="review__spant">{toreview}</span>
+        </span>
+      );
+    }
+    if (movies.length !== 0) {
+      return (
+        <div className="review__true">
+          <Review
+            rating={movies[0].rating}
+            review={movies[0].review}
+            title={movies[0].movieTitle}
+            image={movies[0].poster}
+          />
+        </div>
+      );
+    } else {
+      return <CreateReview />;
+    }
+  };
+
+  return (
+    <div className="onemovie" style={style}>
+      <div className="home">
+        <img className="home__image" src="/lights.png" alt="" />
+        <div className="home__container"></div>
+      </div>
+
+      <div className="movie__container">
+        <div>
+          <div>{} </div>
+
+          <div className="moviename">
+            {movieInfo.title}
+            <span className="movieyear">
+              {" "}
+              ({String(movieInfo.release_date).substr(0, 4)})
+            </span>
+          </div>
+          <div className="content__container">
+            <div className="left__container">
+              <img src={imgUrl} className="poster" alt="movie_poster" />
+              <div className="tagline">{movieInfo.tagline}</div>
+            </div>
+            <div className="right_container">
+              <div className="rating">
+                <span className="rating__title">RATING</span>
+                <span className="rating__count">{movieInfo.vote_average}</span>
+              </div>
+              <div className="info">
+                <div className="info__container">
+                  <span className="info__title">Genre: </span>
+                  <span className="info__value">{genres()}</span>
+                </div>
+                <div className="info__container">
+                  <span className="info__title">Director: </span>
+                  <span className="info__value">{director()}</span>
+                </div>
+                <div className="info__container">
+                  <span className="info__title">Cast: </span>
+                  <span className="info__value">{actors()}</span>
+                </div>
+                <div className="info__container">
+                  <span className="info__overview">{overview()}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="your_review">{test()}</div>
+    </div>
+  );
+}
+
+export default OneMovie;
+
+
+asset-manifest.json,1605895181671,a262edb1087ccef85c98facbdc55bbda67016e063be66cd05fef038d0a8f02c8
+favicon.ico,1605564498995,eae62e993eb980ec8a25058c39d5a51feab118bd2100c4deebb2a9c158ec11f9
+index.html,1605895181671,c85cb4ab517e94ccf28a77121421204e6af6f4d10bdf3e81c717349ccace36d1
+logo192.png,1605564498997,3ee59515172ee198f3be375979df15ac5345183e656720a381b8872b2a39dc8b
+lights.png,1605564498996,3dffeaf6314f547406c97879c48fb04c08bfda8982fe2deb89459473c936f08b
+manifest.json,1605564498998,5c997de1364b8be939319fa9209abd77f2caf7f8844999a9e2e9173f844e7840
+robots.txt,1605564498999,b2090cf9761ef60aa06e4fab97679bd43dfa5e5df073701ead5879d7c68f1ec5
+logomovie.png,1605564498998,04b15651d4809a452b184ed8f3efd45e1d16517e0c737763cf70428718d46a3a
+logo512.png,1605564498997,ee7e2f3fdb8209c4b6fd7bef6ba50d1b9dba30a25bb5c3126df057e1cb6f5331
+static/css/main.f25dabf2.chunk.css,1605895181684,9fb57c80431f0eeb80e402bccbf3da19e19492f92781a3cd8657948be092e431
+static/js/2.b3fa57f2.chunk.js.LICENSE.txt,1605895181685,27bbc09898bef430cffc3391e1e34a6d34f3a2f55093888656b7c49b8f561454
+static/js/3.29a2adaf.chunk.js,1605895181685,616b565768a14a5d5b565c9fdb035c8bfefed7d7362f4d6f32a64a98e4b5e138
+static/js/3.29a2adaf.chunk.js.map,1605895181685,8f4ea4aa0160c617d7b9ce204c232c77a454f96d9d6ab8fd79475fe005e1b06b
+static/css/main.f25dabf2.chunk.css.map,1605895181685,7778babb7cbb480976d0284bc1633281f307a0168a39079478fd37a0e6490e60
+static/js/main.850f7b7f.chunk.js,1605895181685,6b554a58dab50c90137b3810d6129c040c755b5d45322c3da3a1b2f568dddcac
+static/js/runtime-main.c6a21bb6.js,1605895181684,72aefba2df6266a74fad2831023c160f851937a193f837656061bb6d3b195fe4
+static/js/runtime-main.c6a21bb6.js.map,1605895181685,8e6e684fc46e138f223ce8db9230bb4d1d7dac329bf2f2e82148f3de588440e4
+static/media/SearchIcon.f4215dbc.svg,1605895181673,a54c327529f8ee6783649fdebd5730d81d9fe99b02b472348cd6ada660592c6d
+static/media/Star.986e7aa2.svg,1605895181684,7a7970d9015368089b4273eb8875f8fee02af5e2e087765d690d667718757372
+error.png,1605675463769,ff1f4c960b9a03758629eaa5e9f8ac1127eb5fc3b3b39bd56e070030fc299559
+static/js/main.850f7b7f.chunk.js.map,1605895181685,1295643ec33d7c7caba7133034c48a871eb3fc0414898b4b33c3f852d566a7d7
+loading.gif,1605735922045,3434cd73f91c1529383274882509ef5e1ba7319e21e4c06d4e631944102d6576
+static/js/2.b3fa57f2.chunk.js,1605895181674,c0131a7dee4fd7a909e0fe91ce9ef2e3126661a046d17c9b6c456d9c94d09b50
+static/js/2.b3fa57f2.chunk.js.map,1605895181686,84b45035bc7d42282472f9abfc0fca288643629d8126f4c8a278bac441a13d63
+
+
+error.png,1605675463769,ff1f4c960b9a03758629eaa5e9f8ac1127eb5fc3b3b39bd56e070030fc299559
+favicon.ico,1605564498995,eae62e993eb980ec8a25058c39d5a51feab118bd2100c4deebb2a9c158ec11f9
+lights.png,1605564498996,3dffeaf6314f547406c97879c48fb04c08bfda8982fe2deb89459473c936f08b
+loading.gif,1605735922045,3434cd73f91c1529383274882509ef5e1ba7319e21e4c06d4e631944102d6576
+logo192.png,1605564498997,3ee59515172ee198f3be375979df15ac5345183e656720a381b8872b2a39dc8b
+logo512.png,1605564498997,ee7e2f3fdb8209c4b6fd7bef6ba50d1b9dba30a25bb5c3126df057e1cb6f5331
+logomovie.png,1605564498998,04b15651d4809a452b184ed8f3efd45e1d16517e0c737763cf70428718d46a3a
+manifest.json,1605564498998,5c997de1364b8be939319fa9209abd77f2caf7f8844999a9e2e9173f844e7840
+robots.txt,1605564498999,b2090cf9761ef60aa06e4fab97679bd43dfa5e5df073701ead5879d7c68f1ec5
+asset-manifest.json,1605897115972,0107dbe022d8ab12c2dc6e78c651636b817a6f6de52569116b83ee8cc572c5a8
+index.html,1605897115972,ce676ee7f0ecb1202c1ee862c25496fb7dd37c2d5f5d20de6bd14988c34a88e2
+static/css/main.f25dabf2.chunk.css,1605897115974,9fb57c80431f0eeb80e402bccbf3da19e19492f92781a3cd8657948be092e431
+static/js/2.b3fa57f2.chunk.js.LICENSE.txt,1605897115990,27bbc09898bef430cffc3391e1e34a6d34f3a2f55093888656b7c49b8f561454
+static/js/3.29a2adaf.chunk.js,1605897115990,616b565768a14a5d5b565c9fdb035c8bfefed7d7362f4d6f32a64a98e4b5e138
+static/js/3.29a2adaf.chunk.js.map,1605897115990,8f4ea4aa0160c617d7b9ce204c232c77a454f96d9d6ab8fd79475fe005e1b06b
+static/css/main.f25dabf2.chunk.css.map,1605897115990,7778babb7cbb480976d0284bc1633281f307a0168a39079478fd37a0e6490e60
+static/js/main.05bd7cec.chunk.js,1605897115975,8f1c4afaaed4bba7f0eddf9ee4594d819bc0fecb3146b63d877fc560e5d36ccf
+static/js/runtime-main.c6a21bb6.js,1605897115990,72aefba2df6266a74fad2831023c160f851937a193f837656061bb6d3b195fe4
+static/js/runtime-main.c6a21bb6.js.map,1605897115990,8e6e684fc46e138f223ce8db9230bb4d1d7dac329bf2f2e82148f3de588440e4
+static/media/SearchIcon.f4215dbc.svg,1605897115974,a54c327529f8ee6783649fdebd5730d81d9fe99b02b472348cd6ada660592c6d
+static/media/Star.986e7aa2.svg,1605897115990,7a7970d9015368089b4273eb8875f8fee02af5e2e087765d690d667718757372
+static/js/main.05bd7cec.chunk.js.map,1605897115991,54cfc90fba641ef9d9e684d061aeb5081321dd0c4c7e3694fb1f212fea6a2e6a
+static/js/2.b3fa57f2.chunk.js,1605897115991,c0131a7dee4fd7a909e0fe91ce9ef2e3126661a046d17c9b6c456d9c94d09b50
+static/js/2.b3fa57f2.chunk.js.map,1605897115992,84b45035bc7d42282472f9abfc0fca288643629d8126f4c8a278bac441a13d63
