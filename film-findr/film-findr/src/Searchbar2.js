@@ -197,12 +197,14 @@ function Searchbar2() {
         className="searchbutton header__searchIcon"
         onClick={function () {
           let mid = document.getElementById("myInput").getAttribute("data-mid");
-          dispatch({
-            type: "SET_MOVIE_ID",
-            movieId: mid,
-          });
-          localStorage.setItem("movieId", mid);
-          history.push("/onemovie/" + mid);
+          if (mid !== "" || null) {
+            dispatch({
+              type: "SET_MOVIE_ID",
+              movieId: mid,
+            });
+            //localStorage.setItem("movieId", mid);
+            history.push("/onemovie/" + mid);
+          }
         }}
       >
         <img src={SearchIcon} id="searchicon" alt="search" />
