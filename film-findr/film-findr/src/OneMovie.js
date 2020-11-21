@@ -5,7 +5,7 @@ import { fireAuth, fireDb } from "./firebase";
 import axios from "axios";
 import "./Home.css";
 import "./OneMovie.css";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Review from "./Review";
 import CreateReview from "./CreateReview";
 import { animations } from "react-animation";
@@ -18,6 +18,7 @@ function OneMovie() {
   const [toreview, setToreview] = useState("");
   const [movies, setMovies] = useState([]);
   const [count, setCount] = useState(0);
+  const { film_id } = useParams();
 
   let h = [];
 
@@ -26,58 +27,64 @@ function OneMovie() {
   };
 
   useEffect(async () => {
-
     if (!fireAuth.currentUser && localStorage.user == "null") {
       setSign("Sign in");
       setToreview("to see your reviewed movies");
     }
 
     if (fireAuth.currentUser) {
-      try {
-        fireDb
-          .ref("users/" + fireAuth.currentUser?.uid + "/" + state.movieId)
-          .on("value", (snapshot) => {
-            snapshot.forEach((snap) => {
-              h.push(snap.val());
-            });
-            setMovies(h);
-            setCount(h.length);
+      fireDb
+        .ref("users/" + fireAuth.currentUser?.uid + "/" + film_id)
+        .on("value", (snapshot) => {
+          snapshot.forEach((snap) => {
+            h.push(snap.val());
           });
-      } catch {}
+          setMovies(h);
+          setCount(h.length);
+        });
     } else {
-      try {
-        fireDb
-          .ref("users/" + localStorage.user + "/" + state.movieId)
-          .on("value", (snapshot) => {
-            snapshot.forEach((snap) => {
-              h.push(snap.val());
-            });
-            setMovies(h);
-            setCount(h.length);
+      fireDb
+        .ref("users/" + localStorage.user + "/" + film_id)
+        .on("value", (snapshot) => {
+          snapshot.forEach((snap) => {
+            h.push(snap.val());
           });
-      } catch {
-
-      }
+          setMovies(h);
+          setCount(h.length);
+        });
     }
-    let response = await axios({
-      url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
-      method: "GET",
-    });
+    try {
+      let response = await axios({
+        url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
 
-    let response2 = await axios({
-      url: `https://api.themoviedb.org/3/movie/${state.movieId}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
-      method: "GET",
-    });
-    setMovieInfo(response.data);
-    setCast(response2.data);
+      let response2 = await axios({
+        url: `https://api.themoviedb.org/3/movie/${state.movieId}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
+      setMovieInfo(response.data);
+      setCast(response2.data);
+    } catch (err) {
+      let response = await axios({
+        url: `https://api.themoviedb.org/3/movie/${film_id}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
+
+      let response2 = await axios({
+        url: `https://api.themoviedb.org/3/movie/${film_id}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
+      setMovieInfo(response.data);
+      setCast(response2.data);
+    }
   }, [state.movieId, state.isEdited]);
-
 
   let imgUrl;
   if (movieInfo.poster_path) {
     imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
   } else {
-    imgUrl = "./error.png";
+    imgUrl = "/error.png";
   }
 
   const genres = () => {
@@ -122,7 +129,7 @@ function OneMovie() {
     if (!fireAuth.currentUser && localStorage.user == "null") {
       return (
         <span className="review__spans">
-          <Link to="login" style={{ color: "#a19ff2" }}>
+          <Link to="/login" style={{ color: "#a19ff2" }}>
             {sign}
           </Link>{" "}
           <span className="review__spant">{toreview}</span>
@@ -148,7 +155,7 @@ function OneMovie() {
   return (
     <div className="onemovie" style={style}>
       <div className="home">
-        <img className="home__image" src="./lights.png" alt="" />
+        <img className="home__image" src="/lights.png" alt="" />
         <div className="home__container"></div>
       </div>
 

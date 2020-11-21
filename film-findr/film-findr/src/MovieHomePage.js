@@ -23,9 +23,8 @@ function MovieHomePage({ image, title, genres, rating, id }) {
       type: "SET_MOVIE_ID",
       movieId: movId,
     });
-    history.push("/onemovie");
+    history.push("/onemovie/" + movId);
   };
- 
 
   return (
     <div className="movie">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SearchIcon from "./icons/SearchIcon.svg";
 // import autocomplete from "./Autocomplete.js";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useStateValue } from "./StateProvider";
 import { debounce } from "debounce";
 import "./HeaderMain.css";
@@ -18,7 +18,7 @@ async function httpGetMovies(title) {
     method: "GET",
     url: searchUrl + title,
   });
-  
+
   // let response = fetch(searchUrl + title)
   //   .then((response) => response.json())
   //   .then((data) => data.results);
@@ -177,6 +177,7 @@ async function getHttpAndSearch() {
 function Searchbar2() {
   const [search, setSearch] = useState("");
   const [state, dispatch] = useStateValue();
+  const history = useHistory();
   return (
     <div className="header__search">
       <form autoComplete="off">
@@ -191,23 +192,21 @@ function Searchbar2() {
           />
         </p>
       </form>
-      <Link to="/onemovie">
-        <button
-          className="searchbutton header__searchIcon"
-          onClick={function () {
-            let mid = document
-              .getElementById("myInput")
-              .getAttribute("data-mid");
-            dispatch({
-              type: "SET_MOVIE_ID",
-              movieId: mid,
-            });
-            localStorage.setItem("movieId", mid);
-          }}
-        >
-          <img src={SearchIcon} id="searchicon" alt="search" />
-        </button>
-      </Link>
+
+      <button
+        className="searchbutton header__searchIcon"
+        onClick={function () {
+          let mid = document.getElementById("myInput").getAttribute("data-mid");
+          dispatch({
+            type: "SET_MOVIE_ID",
+            movieId: mid,
+          });
+          localStorage.setItem("movieId", mid);
+          history.push("/onemovie/" + mid);
+        }}
+      >
+        <img src={SearchIcon} id="searchicon" alt="search" />
+      </button>
     </div>
   );
 }

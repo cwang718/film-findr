@@ -16,12 +16,12 @@ import { useStateValue } from "./StateProvider";
 import OneMovie from "./OneMovie.js";
 import CreateReview from "./CreateReview.js";
 import EditReview from "./EditReview.js";
+import Loading from "./Loading";
 
 function App() {
   const [{}, dispatch] = useStateValue();
   useEffect(() => {
     fireAuth.onAuthStateChanged((authUser) => {
-
       // if someone logs in or logs out
       if (authUser) {
         dispatch({
@@ -43,7 +43,7 @@ function App() {
           <Route path="/signup">
             <Signup />
           </Route>
-          <Route path="/edit">
+          <Route path="/edit/:film_id">
             <HeaderMain />
             <EditReview />
           </Route>
@@ -56,9 +56,12 @@ function App() {
             <ReviewsPage />
           </Route>
 
-          <Route path="/onemovie">
+          <Route path="/onemovie/:film_id">
             <HeaderMain />
             <OneMovie />
+          </Route>
+          <Route path="/loading">
+            <Loading />
           </Route>
 
           <Route exact path="/">

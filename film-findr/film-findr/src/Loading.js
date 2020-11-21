@@ -1,9 +1,10 @@
 import React from "react";
+import "./Loading.css";
 
 function Loading() {
   return (
     <div id="loading">
-      <img id="loading-image" src="./loading.gif" alt="Loading..." />
+      <h1>Loading...</h1>
     </div>
   );
 }

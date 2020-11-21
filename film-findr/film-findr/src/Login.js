@@ -18,7 +18,7 @@ function Login() {
         if (auth) {
           // if there is a user
           localStorage.setItem("user", auth.user.uid);
-          history.push("./");
+          history.push("/");
         }
       })
       .catch((err) => setErrorMessage(err.message));
@@ -32,7 +32,7 @@ function Login() {
       <div className="login" style={style}>
         <img className="lights" src="lights.png" alt="logo" />
         <Link to="/">
-          <img className="login__logo" src="./logomovie.png" alt="logo" />
+          <img className="login__logo" src="/logomovie.png" alt="logo" />
         </Link>
 
         <div className="login_fields">

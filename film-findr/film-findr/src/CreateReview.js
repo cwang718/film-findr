@@ -3,7 +3,7 @@ import Star from "./icons/Star.svg";
 import "./CreateReview.css";
 import { useStateValue } from "./StateProvider";
 import { fireAuth, fireDb } from "./firebase";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import axios from "axios";
 
 function CreateReview() {
@@ -13,10 +13,11 @@ function CreateReview() {
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
   const [movieInfo, setMovieInfo] = useState([]);
+  const { film_id } = useParams();
 
   useEffect(async () => {
     let response = await axios({
-      url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      url: `https://api.themoviedb.org/3/movie/${film_id}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
       method: "GET",
     });
     setMovieInfo(response.data);
@@ -26,7 +27,7 @@ function CreateReview() {
   if (movieInfo.poster_path) {
     imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
   } else {
-    imgUrl = "./error.png";
+    imgUrl = "/error.png";
   }
 
   const changeColor = (e) => {
@@ -111,16 +112,14 @@ function CreateReview() {
       setErrorMessage("Rate the movie using the stars!");
     } else {
       try {
-        fireDb
-          .ref("users/" + fireAuth.currentUser?.uid + "/" + state.movieId)
-          .set({
-            movieId: {
-              rating: selected,
-              review: myReview,
-              movieTitle: movieInfo.title,
-              poster: imgUrl,
-            },
-          });
+        fireDb.ref("users/" + fireAuth.currentUser?.uid + "/" + film_id).set({
+          movieId: {
+            rating: selected,
+            review: myReview,
+            movieTitle: movieInfo.title,
+            poster: imgUrl,
+          },
+        });
       } catch (err) {
         setErrorMessage(err.message);
       }

@@ -4,6 +4,7 @@ import MovieHomePage from "./MovieHomePage";
 import { animations } from "react-animation";
 import axios from "axios";
 import { Link, useHistory } from "react-router-dom";
+import Loading from "./Loading.js";
 
 function Home() {
   const style = {
@@ -30,11 +31,13 @@ function Home() {
 
   //.map((genre) => " " + genre.name)
   //.toString();
-
+  if (popularMoviesInfo.length === 0) {
+    return <Loading style={style} />;
+  }
   return (
-    <div className="home">
+    <div className="home" style={style}>
       <div className="home__container">
-        <img className="home__image" src="./lights.png" alt="" />
+        <img className="home__image" src="/lights.png" alt="" />
         <div className="grid-container">
           {popularMoviesInfo.map(
             ({ title, poster_path, genre_ids, vote_average, id }) => (
@@ -48,6 +51,7 @@ function Home() {
                     .map((one) => " " + one.name)
                     .toString()}
                   rating={vote_average}
+                  style={style}
                 />
               </div>
             )

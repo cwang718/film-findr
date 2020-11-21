@@ -12,7 +12,7 @@ function Review({ rating, review, image, title }) {
   const [state, dispatch] = useStateValue();
   function editReview(e) {
     setIsEdit(true);
-    history.push("./edit");
+    history.push("/edit/" + state.movieId);
   }
 
   async function deleteReview(e) {

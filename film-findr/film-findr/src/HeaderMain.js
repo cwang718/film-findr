@@ -14,27 +14,26 @@ function HeaderMain() {
   const [state, action] = useStateValue(); // get user by state.user and get reviews by state.reviews
   const history = useHistory();
   const handleLogInOrReviews = () => {
- 
     if (state.user) {
       // is there someone logged in????
-    
+
       // go to reviews page
-      history.push("./reviews"); //redirect to the reviews path
+      history.push("/reviews"); //redirect to the reviews path
     } else {
-      history.push("./login");
+      history.push("/login");
     }
   };
 
   const handleCreateOrLogOut = () => {
     if (state.user) {
       // is there someone logged in????
-  
+
       fireAuth.signOut();
       localStorage.setItem("user", null);
-      history.push("./");
+      history.push("/");
       // go to reviews page
     } else {
-      history.push("./signup");
+      history.push("/signup");
     }
   };
   return (
@@ -42,7 +41,7 @@ function HeaderMain() {
       <Link to="/">
         <img
           className="header__logo"
-          src="logomovie.png"
+          src="/logomovie.png"
           alt="logo"
           style={style}
         />

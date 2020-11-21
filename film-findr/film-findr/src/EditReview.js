@@ -3,8 +3,9 @@ import Star from "./icons/Star.svg";
 import "./EditReview.css";
 import { useStateValue } from "./StateProvider";
 import { fireAuth, fireDb } from "./firebase";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import axios from "axios";
+import Loading from "./Loading";
 
 function EditReview() {
   const [state, action] = useStateValue();
@@ -14,25 +15,42 @@ function EditReview() {
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
   const [movieInfo, setMovieInfo] = useState([]);
+  const { film_id } = useParams();
 
   useEffect(async () => {
-    let response = await axios({
-      url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
-      method: "GET",
-    });
-    let response2 = await axios({
-      url: `https://${process.env.REACT_APP_FIREBASE_projectId}.firebaseio.com/users/${state.user.uid}/${state.movieId}/movieId.json`,
-      method: "GET",
-    });
-    setMovieInfo(response.data);
-    setOldReview(response2.data);
-  }, []);
+    if (!fireAuth.currentUser && localStorage.user == "null") {
+      history.push("/login");
+    }
+    if (fireAuth.currentUser) {
+      let response = await axios({
+        url: `https://api.themoviedb.org/3/movie/${film_id}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
+      let response2 = await axios({
+        url: `https://${process.env.REACT_APP_FIREBASE_projectId}.firebaseio.com/users/${state.user?.uid}/${film_id}/movieId.json`,
+        method: "GET",
+      });
+      setMovieInfo(response.data);
+      setOldReview(response2.data);
+    } else {
+      let response = await axios({
+        url: `https://api.themoviedb.org/3/movie/${film_id}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+        method: "GET",
+      });
+      let response2 = await axios({
+        url: `https://${process.env.REACT_APP_FIREBASE_projectId}.firebaseio.com/users/${localStorage.user}/${film_id}/movieId.json`,
+        method: "GET",
+      });
+      setMovieInfo(response.data);
+      setOldReview(response2.data);
+    }
+  }, [state.user]);
 
   let imgUrl;
   if (movieInfo.poster_path) {
     imgUrl = `https://image.tmdb.org/t/p/original/${movieInfo.poster_path}`;
   } else {
-    imgUrl = "./error.png";
+    imgUrl = "/error.png";
   }
 
   const changeColor = (e) => {
@@ -117,28 +135,39 @@ function EditReview() {
       setErrorMessage("Rate the movie using the stars!");
     } else {
       try {
-        fireDb
-          .ref("users/" + fireAuth.currentUser?.uid + "/" + state.movieId)
-          .set({
-            movieId: {
-              rating: selected,
-              review: myReview,
-              movieTitle: movieInfo.title,
-              poster: imgUrl,
-            },
-          });
-        history.push("/onemovie");
+        fireDb.ref("users/" + fireAuth.currentUser?.uid + "/" + film_id).set({
+          movieId: {
+            rating: selected,
+            review: myReview,
+            movieTitle: movieInfo.title,
+            poster: imgUrl,
+          },
+        });
+        history.push("/onemovie/" + film_id);
       } catch (err) {
         setErrorMessage(err.message);
       }
     }
   };
 
+  const handleImageClick = () => {
+    history.push("/onemovie/" + film_id);
+  };
+
+  if (!state.user) {
+    return <Loading />;
+  }
+
   return (
     <div className="testing">
       <div className="movie__info">
         <div className="moviename">{movieInfo.title}</div>
-        <img src={imgUrl} className="poster" alt="movie_poster" />
+        <img
+          src={imgUrl}
+          className="poster"
+          alt="movie_poster"
+          onClick={handleImageClick}
+        />
       </div>
       <div className="edit">
         <div className="createR__rating">

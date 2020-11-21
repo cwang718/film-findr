@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Signup.css";
 import { Link, useHistory } from "react-router-dom";
-import { fireAuth, fireDb } from "./firebase";
+import { fireAuth } from "./firebase";
 import { animations } from "react-animation";
 function Signup() {
   const history = useHistory();
@@ -17,7 +17,7 @@ function Signup() {
         if (auth) {
           // if there is a user
           localStorage.setItem("user", auth.user.uid);
-          history.push("./");
+          history.push("/");
         }
       })
       .catch((err) => setErrorMessage(err.message));
@@ -31,7 +31,7 @@ function Signup() {
       <div className="signup" style={style}>
         <img className="lights" src="lights.png" alt="logo" />
         <Link to="/">
-          <img className="signup__logo" src="./logomovie.png" alt="logo" />
+          <img className="signup__logo" src="/logomovie.png" alt="logo" />
         </Link>
         <div className="signup_fields">
           <label className="signup__labels">name:</label>

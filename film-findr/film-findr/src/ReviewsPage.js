@@ -65,9 +65,13 @@ function ReviewsPage() {
     animation: animations.fadeIn,
   };
 
+  if (!fireAuth.currentUser) {
+    return <Loading />;
+  }
+
   return (
     <div className="reviewsPage">
-      <img className="review__lights" src="./lights.png" alt="" />
+      <img className="review__lights" src="/lights.png" alt="" />
       <div className="review__count" style={style}>
         <span style={style}> You have reviewed {count} movies so far!</span>
       </div>
