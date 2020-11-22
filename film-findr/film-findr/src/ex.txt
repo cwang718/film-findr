@@ -2325,3 +2325,45 @@ static/media/Star.986e7aa2.svg,1605897115990,7a7970d9015368089b4273eb8875f8fee02
 static/js/main.05bd7cec.chunk.js.map,1605897115991,54cfc90fba641ef9d9e684d061aeb5081321dd0c4c7e3694fb1f212fea6a2e6a
 static/js/2.b3fa57f2.chunk.js,1605897115991,c0131a7dee4fd7a909e0fe91ce9ef2e3126661a046d17c9b6c456d9c94d09b50
 static/js/2.b3fa57f2.chunk.js.map,1605897115992,84b45035bc7d42282472f9abfc0fca288643629d8126f4c8a278bac441a13d63
+let response = await axios({
+          url: `https://api.themoviedb.org/3/movie/${film_id}/similar?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+          method: "GET",
+        });
+
+
+
+        movies.filter((movie) => console.log(movie));
+  setMovies(movies.filter((movie) => console.log(movie))); // p will give all the movies they rated 4 or more stars for
+  // go through p and do a similar api call for each
+  //console.log(o);
+
+  //setMovies(o.map((mov) => mov.movieId.id)); // extract all ids that i need for seeing similar movies
+
+  j = p.map(async (f_id) => {
+    console.log(f_id);
+    return await axios({
+      url: `https://api.themoviedb.org/3/movie/${f_id}/similar?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      method: "GET",
+    });
+  });
+
+  const functionWithPromise = (f_id) => {
+    //a function that returns a promise
+    return axios({
+      url: `https://api.themoviedb.org/3/movie/${f_id}/similar?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      method: "GET",
+    });
+  };
+
+  const anAsyncFunction = async (id) => {
+    return functionWithPromise(id);
+  };
+
+  const getData = async () => {
+    return Promise.all(
+      movies.map((movie) => anAsyncFunction(movie.movieId.id))
+    );
+  };
+  getData().then((data) => {
+    data.map((data) => data.data.results.slice(0, 3).map);
+  });

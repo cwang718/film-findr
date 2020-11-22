@@ -14,15 +14,17 @@ const searchUrl =
   "&query=";
 
 async function httpGetMovies(title) {
-  let response = await axios({
-    method: "GET",
-    url: searchUrl + title,
-  });
-
+  if (document.getElementById("myInput").value) {
+    let response = await axios({
+      method: "GET",
+      url: searchUrl + title,
+    });
+    return response.data.results;
+  }
   // let response = fetch(searchUrl + title)
   //   .then((response) => response.json())
   //   .then((data) => data.results);
-  return response.data.results; //returns array of movies
+  return; //returns array of movies
 }
 
 const autocomplete = (arr) => {
@@ -170,7 +172,10 @@ const autocomplete = (arr) => {
 
 async function getHttpAndSearch() {
   let word = document.getElementById("myInput").value;
-  await httpGetMovies(word).then((result) => autocomplete(result));
+  try {
+    await httpGetMovies(word).then((result) => autocomplete(result));
+  } catch (e) {}
+
   // autocomplete(document.getElementById("myInput"), searchtitle);
 }
 
@@ -197,7 +202,7 @@ function Searchbar2() {
         className="searchbutton header__searchIcon"
         onClick={function () {
           let mid = document.getElementById("myInput").getAttribute("data-mid");
-          if (mid !== "" || null) {
+          if (document.getElementById("myInput").value !== "" || null) {
             dispatch({
               type: "SET_MOVIE_ID",
               movieId: mid,
