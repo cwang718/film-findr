@@ -11,6 +11,7 @@ import { useStateValue } from "./StateProvider";
 import OneMovie from "./OneMovie.js";
 import EditReview from "./EditReview.js";
 import Loading from "./Loading";
+import Recommendations from "./Recommendations";
 
 function App() {
   const [{}, dispatch] = useStateValue();
@@ -52,9 +53,6 @@ function App() {
           <Route path="/onemovie/:film_id">
             <HeaderMain />
             <OneMovie />
-          </Route>
-          <Route path="/loading">
-            <Loading />
           </Route>
 
           <Route exact path="/">

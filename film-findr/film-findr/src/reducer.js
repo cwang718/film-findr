@@ -6,12 +6,11 @@ export const initialState = {
 };
 
 const reducer = (state, action) => {
-  
   switch (action.type) {
     case "ADD_REVIEW":
       return {
         ...state,
-        reviews: [...state.reviews, action.movie],
+        reviews: action.reviews,
       };
 
     case "SET_USER":

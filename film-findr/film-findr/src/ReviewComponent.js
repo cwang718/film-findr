@@ -5,10 +5,21 @@ import { Link, useHistory } from "react-router-dom";
 import { useStateValue } from "./StateProvider";
 
 function ReviewComponent({ image, title, rating, review, id }) {
+  const history = useHistory();
+  const [state, dispatch] = useStateValue();
+  const handleImageClick = (e) => {
+    dispatch({
+      type: "SET_MOVIE_ID",
+      movieId: id,
+    });
+    history.push("/onemovie/" + id);
+  };
   return (
     <div className="reviewC">
       <div className="reviewC__rating">
-        <div className="reviewC__title">{title}</div>
+        <div className="reviewC__title" onClick={handleImageClick}>
+          {title}
+        </div>
         <div className="reviewC__your__rating">
           {Array(rating)
             .fill()
@@ -18,7 +29,7 @@ function ReviewComponent({ image, title, rating, review, id }) {
         </div>
       </div>
       <div className="reviewC__text__container">
-        <img src={image} alt="movie_poster" />
+        <img src={image} alt="movie_poster" onClick={handleImageClick} />
         <div className="reviewC__your__review">
           <span>"{review}"</span>
         </div>

@@ -6,6 +6,8 @@ import { useStateValue } from "./StateProvider";
 import { animations } from "react-animation";
 import { Link } from "react-router-dom";
 import Loading from "./Loading";
+import axios from "axios";
+import Recommendations from "./Recommendations";
 
 function ReviewsPage() {
   // get firebase movies collection
@@ -16,7 +18,7 @@ function ReviewsPage() {
   const [count, setCount] = useState(0);
 
   let h = [];
-  useEffect(() => {
+  useEffect(async () => {
     if (!fireAuth.currentUser && localStorage.user == "null") {
       setSign("Sign in");
       setToreview("to see your reviewed movies");
@@ -84,6 +86,7 @@ function ReviewsPage() {
               image={movie.poster}
               rating={movie.rating}
               review={movie.review}
+              id={movie.id}
             />
           ))}
       </div>

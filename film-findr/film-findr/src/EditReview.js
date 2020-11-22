@@ -141,6 +141,7 @@ function EditReview() {
             review: myReview,
             movieTitle: movieInfo.title,
             poster: imgUrl,
+            id: film_id,
           },
         });
         history.push("/onemovie/" + film_id);

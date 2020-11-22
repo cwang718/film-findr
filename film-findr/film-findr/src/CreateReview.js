@@ -21,7 +21,7 @@ function CreateReview() {
       method: "GET",
     });
     setMovieInfo(response.data);
-  }, []);
+  }, [film_id]);
 
   let imgUrl;
   if (movieInfo.poster_path) {
@@ -118,6 +118,7 @@ function CreateReview() {
             review: myReview,
             movieTitle: movieInfo.title,
             poster: imgUrl,
+            id: film_id,
           },
         });
       } catch (err) {
