@@ -3,6 +3,8 @@ import "./Recommendations.css";
 import { useStateValue } from "./StateProvider";
 import getRecommendations from "./getRecommendations";
 import { useHistory, useParams } from "react-router-dom";
+import { animated, useSpring } from "react-spring";
+import { useScroll } from "react-use-gesture";
 
 function Recommendations() {
   const [state, dispatch] = useStateValue();
@@ -10,6 +12,18 @@ function Recommendations() {
   const [similar, setSimilar] = useState("");
   const [loaded, setLoaded] = useState(false);
   const history = useHistory();
+
+  const [style, set] = useSpring(() => ({
+    transform: "perspective(500px) rotateY(0deg)",
+  }));
+
+  const bind = useScroll((event) => {
+    set({
+      transform: `perspective(500px) rotateY(${
+        event.scrolling ? event.delta[0] : 0
+      }deg)`,
+    });
+  });
 
   const onImageClick = function (e) {
     let mid = e.currentTarget.id.slice(3);
@@ -42,12 +56,13 @@ function Recommendations() {
           {movies.length > 0 ? "Recommended movies: " : ""}
         </span>
       </div>
-      <div className="container">
+      <div className="container" {...bind()}>
         {movies.map((src) => (
-          <div
+          <animated.div
             key={src.id}
             className="card"
             style={{
+              ...style,
               backgroundImage:
                 src.poster_path !== ""
                   ? `url(https://image.tmdb.org/t/p/original/${src.poster_path})`
