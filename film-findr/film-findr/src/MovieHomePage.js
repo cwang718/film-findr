@@ -33,6 +33,15 @@ function MovieHomePage({ image, title, genres, rating, id }) {
   return (
     <div className="movie">
       <div className="movie__rating">
+        <span className="star__rating">
+          <img
+            src={Star}
+            className={`createR__star__yellow`}
+            alt="ratingstars"
+            style={{ width: "25px" }}
+          />
+          <span className="spacer">{decimal}</span>
+        </span>
         <img
           className="star"
           src={image}
@@ -40,15 +49,8 @@ function MovieHomePage({ image, title, genres, rating, id }) {
           id={id}
           onClick={linkToOneMovie}
         />
-      <h1 className={tooBig}>{title}</h1>
-      <p className="movie__genres">{genres}</p>
-      <span className="star__rating">
-        <img src={Star}
-          className={`createR__star__yellow`} 
-          alt="ratingstars"
-          style={{ width: "25px" }} />
-        <span className="spacer">{decimal}</span>
-      </span>
+        <h1 className={tooBig}>{title}</h1>
+        <p className="movie__genres">{genres}</p>
       </div>
     </div>
   );

@@ -16,23 +16,23 @@ function Home() {
   const [select, setSelect] = useState("popular");
   useEffect(() => {
     async function fetchInfo() {
-      if(select=="popular") {
+      if (select === "popular") {
         let response = await axios({
           url: `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_FIREBASE_imdb}&language=en-US&page=1`,
           method: "GET",
         });
         setPopularMoviesInfo(response.data.results);
-      } else if(select=="toprated") {
+      } else if (select === "toprated") {
         let response = await axios({
           url: `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.REACT_APP_FIREBASE_imdb}&language=en-US&page=1`,
           method: "GET",
         });
         setPopularMoviesInfo(response.data.results);
-      } 
+      }
       let soonResponse = await axios({
         url: `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.REACT_APP_FIREBASE_imdb}&language=en-US&page=1`,
         method: "GET",
-      })
+      });
       setSoonMovies(soonResponse.data.results);
       // }
       let genreResponse = await axios({
@@ -46,7 +46,7 @@ function Home() {
 
   const handleDropdownChange = (e) => {
     setSelect(e.target.value);
-  }
+  };
 
   //.map((genre) => " " + genre.name)
   //.toString();
@@ -62,15 +62,24 @@ function Home() {
         </div>
         <div className="selectCon">
           <label htmlFor="sort">Sort by: </label>
-          <select className="sort" id="mySort" defaultValue="popular" onChange={handleDropdownChange}>
+          <select
+            className="sort"
+            id="mySort"
+            defaultValue="popular"
+            onChange={handleDropdownChange}
+          >
             <option value="popular">Popularity</option>
             <option value="toprated">Top rated</option>
           </select>
         </div>
         <div className="grid-container">
           {popularMoviesInfo.map(
-            ({ title, poster_path, genre_ids, vote_average, id }) => (
-              <div className="grid-item" style={style}>
+            ({ title, poster_path, genre_ids, vote_average, id }, idx) => (
+              <div
+                className="grid-item"
+                style={style}
+                key={id + idx + vote_average}
+              >
                 <MovieHomePage
                   id={id}
                   title={title}
