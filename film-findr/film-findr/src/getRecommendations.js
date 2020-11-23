@@ -13,37 +13,40 @@ async function getRecommendations() {
   };
 
   // gets all reviews given the user
-  if (fireAuth.currentUser) {
-    try {
-      fireDb
-        .ref("users/" + fireAuth.currentUser?.uid)
-        .on("value", (snapshot) => {
-          snapshot.forEach((snap) => {
-            h.push(snap.val());
-          });
-          //   let snaps = snapshot.map((s) => s.val());
-          //   h.push(...snaps);
-        });
-    } catch (err) {}
-    // } else {
-    //   console.log("local");
-    //   try {
-    //     fireDb.ref("users/" + localStorage.user).on("value", (snapshot) => {
-    //       let snaps = snapshot.map((s) => s.val());
-    //       h.push(...snaps);
-    //       // snapshot.forEach((snap) => {
-    //       //   h.push(snap.val());
-    //       // });
-    //     });
-    //   } catch (err) {}
-  }
+  const getAllReviews = async function () {
+    let response2 = await axios({
+      url: `https://${process.env.REACT_APP_FIREBASE_projectId}.firebaseio.com/users/${fireAuth.currentUser?.uid}.json`,
+      method: "GET",
+    });
+    return response2.data;
+  };
 
-  let y = h.filter((review) => review.movieId.rating >= 4);
+  Array.prototype.contains = function (v) {
+    for (let i = 0; i < this.length; i++) {
+      if (this[i] === v) return true;
+    }
+    return false;
+  };
 
+  Array.prototype.unique = function () {
+    let arr = [];
+    let h = [];
+    for (let i = 0; i < this.length; i++) {
+      if (!h.contains(this[i].id)) {
+        arr.push(this[i]);
+        h.push(this[i].id);
+      }
+    }
+    return arr;
+  };
+
+  let j = await getAllReviews();
+  let n = Object.values(j);
+  let y = n.filter((review) => review.movieId.rating >= 4);
   let promises = y.map((review) => apiCall(review)); // tried async function in map
-
   let gets = (await Promise.all(promises)).flat();
-  return gets;
+  let myOrderedArray = gets.unique();
+  return myOrderedArray;
 }
 
 export default getRecommendations;

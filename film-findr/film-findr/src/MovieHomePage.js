@@ -36,7 +36,7 @@ function MovieHomePage({ image, title, genres, rating, id }) {
         <span className="star__rating">
           <img
             src={Star}
-            className={`createR__star__yellow`}
+            className={`star_other_yellow`}
             alt="ratingstars"
             style={{ width: "25px" }}
           />
