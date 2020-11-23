@@ -29,29 +29,37 @@ The database we decided to use was firebase realtime database
 The backend is set up in this way:
 
 users:
+
 ------ (firebase Authentication Id):
+
 ---------------------------------------(movieId):
+
 ---------------------------------------------------- movieId:
+
 ---------------------------------------------------------------- id: (id from TMDB)
+
 ---------------------------------------------------------------- movieTitle: (title from TMDB)
----------------------------------------------------------------- poster: (poster_path from TMDB or /error.png that we created in Adobe Illustrator)
+
+---------------------------------------------------------------- poster: (poster_path from TMDB or /error.png)
+
 ---------------------------------------------------------------- rating: (rating from user)
+
 ---------------------------------------------------------------- user: (review from user)
 
 ### Routes
 
-`/` : GET (TMDB ?popular, ?toprated, ?upcoming) 
-    - Home page that gets popular, top rated, and upcoming movies and houses the navigation
-`/signup`: POST (firebase function)
-    - Sign up page that makes an API call to firebase and registers an account
-`/login`: POST (firebase function)
-    - Log in page that makes an API call to firebase and authenticates based on the provided credentials
-`/reviews`: GET (database)
-    - Makes an API call to the database and gets all of the user's reviews and shows recommended movies (if applicable)
-`/onemovie/:film_id`: GET (user), GET (TMDB ?details) POST (database)
-    - Makes an API call to the TMDB database based on the url params to get the specific movie's information
-`/edit/:film_id`: GET (TMDB), GET (database), POST (database)
-    - Makes a GET request to the TMDB database to get the specific movie, then makes a GET request to the database to get the pre-edited review, and then makes a POST request to the   database
+`/` : GET (TMDB ?popular, ?toprated, ?upcoming) - Home page that gets popular, top rated, and upcoming movies and houses the navigation
+
+`/signup`: POST (firebase function) - Sign up page that makes an API call to firebase and registers an account
+
+`/login`: POST (firebase function) - Log in page that makes an API call to firebase and authenticates based on the provided credentials
+
+`/reviews`: GET (database) - Makes an API call to the database and gets all of the user's reviews and shows recommended movies (if applicable)
+
+`/onemovie/:film_id`: GET (user), GET (TMDB ?details) POST (database) - Makes an API call to the TMDB database based on the url params to get the specific movie's information
+
+`/edit/:film_id`: GET (TMDB), GET (database), POST (database) - Makes a GET request to the TMDB database to get the specific movie, then makes a GET request to the database to get the pre-edited review, and then makes a POST request to the database
+
 # Made by
 
 Vivek Patel and Charlotte Wang
