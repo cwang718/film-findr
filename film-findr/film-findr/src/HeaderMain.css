@@ -36,10 +36,11 @@
 
 .header__searchIcon {
   padding: 5px;
-  height: 41px !important;
+  height: 38px !important;
   width: 50px;
   background-color: #a19ff2;
   border-radius: 0px 10px 10px 0px;
+  border: none;
 }
 
 .header__optionLog {
