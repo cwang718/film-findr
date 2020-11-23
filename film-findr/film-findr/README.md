@@ -1,70 +1,57 @@
-# Getting Started with Create React App
+# Welcome to filmfindr
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Filmfindr lets you create a film journal for all your film needs. Create any type of notes or reviews on a movie and it will only be seen by you.
+So if you have anything on your mind about a specific film, just use filmfindr to store those thoughts.
 
-## Available Scripts
+## This web application is also completely usable without an account
 
-In the project directory, you can run:
+To get the most out of the website, you should make an account, but it will still work if you are not logged in.
+As a guest, you will be able to see the popular movies on the home page and search for any movie and see the rating, actors, title, director, and plot synopsis
+You can do all that and more with an account though
 
-### `npm start`
+# APIs used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+TMDB implemenation document here: https://developers.themoviedb.org/
+React Context Api
+Firebase
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## UI Design
 
-### `npm test`
+Logo, favicon, error poster, and lights header were all made in Adobe Illustrator. We also prototyped the UI/UX in figma beforehand
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Frontend Implementation
 
-### `npm run build`
+The frontend was build through React.js components and our own css files for each of those React components.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Backend Implementation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The database we decided to use was firebase realtime database
+The backend is set up in this way:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+users:
+------ (firebase Authentication Id):
+---------------------------------------(movieId):
+---------------------------------------------------- movieId:
+---------------------------------------------------------------- id: (id from TMDB)
+---------------------------------------------------------------- movieTitle: (title from TMDB)
+---------------------------------------------------------------- poster: (poster_path from TMDB or /error.png that we created in Adobe Illustrator)
+---------------------------------------------------------------- rating: (rating from user)
+---------------------------------------------------------------- user: (review from user)
 
-### `npm run eject`
+### Routes
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+`/` : GET (TMDB ?popular, ?toprated, ?upcoming) 
+    - Home page that gets popular, top rated, and upcoming movies and houses the navigation
+`/signup`: POST (firebase function)
+    - Sign up page that makes an API call to firebase and registers an account
+`/login`: POST (firebase function)
+    - Log in page that makes an API call to firebase and authenticates based on the provided credentials
+`/reviews`: GET (database)
+    - Makes an API call to the database and gets all of the user's reviews and shows recommended movies (if applicable)
+`/onemovie/:film_id`: GET (user), GET (TMDB ?details) POST (database)
+    - Makes an API call to the TMDB database based on the url params to get the specific movie's information
+`/edit/:film_id`: GET (TMDB), GET (database), POST (database)
+    - Makes a GET request to the TMDB database to get the specific movie, then makes a GET request to the database to get the pre-edited review, and then makes a POST request to the   database
+# Made by
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Vivek Patel and Charlotte Wang

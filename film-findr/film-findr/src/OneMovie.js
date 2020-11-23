@@ -53,31 +53,18 @@ function OneMovie() {
           setCount(h.length);
         });
     }
-    try {
-      let response = await axios({
-        url: `https://api.themoviedb.org/3/movie/${state.movieId}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
-        method: "GET",
-      });
 
-      let response2 = await axios({
-        url: `https://api.themoviedb.org/3/movie/${state.movieId}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
-        method: "GET",
-      });
-      setMovieInfo(response.data);
-      setCast(response2.data);
-    } catch (err) {
-      let response = await axios({
-        url: `https://api.themoviedb.org/3/movie/${film_id}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
-        method: "GET",
-      });
+    let response = await axios({
+      url: `https://api.themoviedb.org/3/movie/${film_id}?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      method: "GET",
+    });
 
-      let response2 = await axios({
-        url: `https://api.themoviedb.org/3/movie/${film_id}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
-        method: "GET",
-      });
-      setMovieInfo(response.data);
-      setCast(response2.data);
-    }
+    let response2 = await axios({
+      url: `https://api.themoviedb.org/3/movie/${film_id}/credits?api_key=${process.env.REACT_APP_FIREBASE_imdb}`,
+      method: "GET",
+    });
+    setMovieInfo(response.data);
+    setCast(response2.data);
   }, [state.movieId, state.isEdited]);
 
   let imgUrl;

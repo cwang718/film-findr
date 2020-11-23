@@ -74,19 +74,21 @@ function ReviewsPage() {
   return (
     <div className="reviewsPage">
       <img className="review__lights" src="/lights.png" alt="" />
+      <Recommendations />
       <div className="review__count" style={style}>
         <span style={style}> You have reviewed {count} movies so far!</span>
       </div>
       <div className="review__container" style={style}>
         {movies
           .map((film) => film.movieId)
-          .map((movie) => (
+          .map((movie, idx) => (
             <ReviewComponent
               title={movie.movieTitle}
               image={movie.poster}
               rating={movie.rating}
               review={movie.review}
               id={movie.id}
+              key={movie.id + "reviewspage" + idx}
             />
           ))}
       </div>

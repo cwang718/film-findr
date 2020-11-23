@@ -23,8 +23,13 @@ function ReviewComponent({ image, title, rating, review, id }) {
         <div className="reviewC__your__rating">
           {Array(rating)
             .fill()
-            .map((rating) => (
-              <img src={Star} className="reviewC__star" alt="star" />
+            .map((rating, idx) => (
+              <img
+                src={Star}
+                className="reviewC__star"
+                alt="star"
+                key={"star" + idx}
+              />
             ))}
         </div>
       </div>
