@@ -53,7 +53,7 @@ function HomeCarousel ({ upcomingmovies }) {
                     >movie details
                 </button>
                 <img className="bdimage"  
-                     src={`https://image.tmdb.org/t/p/original/${index.backdrop_path}`}
+                     src={index.backdrop_path ? `https://image.tmdb.org/t/p/original/${index.backdrop_path}`: `/error.png`}
                 />
             </div>)
             )}
