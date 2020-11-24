@@ -144,11 +144,11 @@ function CreateReview() {
           <textarea
             className="createR__textarea"
             id="create_review_text"
-            placeholder="Write a review"
+            placeholder="write a review"
             onChange={(e) => setMyReview(e.target.value)}
           ></textarea>
           <button className="signup__button" onClick={handleSubmit}>
-            Save Review
+            save review
           </button>
           <span className="signup__error">{errorMessage}</span>
         </div>
