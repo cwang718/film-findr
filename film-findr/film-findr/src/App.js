@@ -10,8 +10,6 @@ import { fireAuth } from "./firebase";
 import { useStateValue } from "./StateProvider";
 import OneMovie from "./OneMovie.js";
 import EditReview from "./EditReview.js";
-import Loading from "./Loading";
-import Recommendations from "./Recommendations";
 
 function App() {
   const [{}, dispatch] = useStateValue();
