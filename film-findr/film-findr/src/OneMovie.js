@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import HeaderMain from "./HeaderMain";
 import { useStateValue } from "./StateProvider";
 import { fireAuth, fireDb } from "./firebase";
 import axios from "axios";
@@ -160,7 +159,7 @@ function OneMovie() {
           <div className="content__container">
             <div className="left__container">
               <img src={imgUrl} className="poster" alt="movie_poster" />
-              <div className="tagline">{movieInfo.tagline}</div>
+              <div className="tagline">{movieInfo.tagline ? (`"${movieInfo.tagline}"`) : ""}</div>
             </div>
             <div className="right_container">
               <div className="rating">

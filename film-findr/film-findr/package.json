@@ -15,6 +15,7 @@
     "react-axios": "^2.0.3",
     "react-cache": "^2.0.0-alpha.1",
     "react-dom": "^17.0.1",
+    "react-infinite-scroll-component": "^5.1.0",
     "react-responsive-carousel": "^3.1.33",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
