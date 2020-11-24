@@ -2,13 +2,12 @@ import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./HomeCarousel.css";
 import { Carousel } from "react-responsive-carousel";
-import { withKnobs, boolean, number } from "@storybook/addon-knobs";
+import { boolean, number } from "@storybook/addon-knobs";
 import { useStateValue } from "./StateProvider";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const tooglesGroupId = "Toggles";
 const valuesGroupId = "Values";
-const mainGroupId = "Main";
 
 const getConfigurableProps = () => ({
   showArrows: boolean("showArrows", true, tooglesGroupId),
@@ -30,8 +29,10 @@ const getConfigurableProps = () => ({
 });
 
 function HomeCarousel({ upcomingmovies }) {
+  console.log = console.warn = console.error = () => {};
   const history = useHistory();
   const [state, dispatch] = useStateValue();
+  let x = state;
   const handleImageClick = (e) => {
     let mid = e.target.id.slice(5);
     dispatch({
