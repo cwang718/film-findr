@@ -26,6 +26,7 @@ function OneMovie() {
   };
 
   useEffect(async () => {
+    window.scrollTo(0, 0);
     if (!fireAuth.currentUser && localStorage.user == "null") {
       setSign("Sign in");
       setToreview("to see your reviewed movies");
@@ -159,7 +160,9 @@ function OneMovie() {
           <div className="content__container">
             <div className="left__container">
               <img src={imgUrl} className="poster" alt="movie_poster" />
-              <div className="tagline">{movieInfo.tagline ? (`"${movieInfo.tagline}"`) : ""}</div>
+              <div className="tagline">
+                {movieInfo.tagline ? `"${movieInfo.tagline}"` : ""}
+              </div>
             </div>
             <div className="right_container">
               <div className="rating">
