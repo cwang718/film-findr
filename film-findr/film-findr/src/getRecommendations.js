@@ -42,7 +42,6 @@ async function getRecommendations() {
     };
 
     let j = await getAllReviews();
-    console.log(j);
     let n = Object.values(j);
     let y = n.filter((review) => review.movieId.rating >= 4);
     let promises = y.map((review) => apiCall(review)); // tried async function in map

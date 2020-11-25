@@ -46,6 +46,32 @@ users:
 
 ---------------------------------------------------------------- user: (review from user)
 
+Backend:
+
+## Get rating
+
+Method: GET, https://film-findr.firebaseio.com/users/{userId}/{movie_id}/movieId.json
+
+## Set rating
+
+Method: POST, https://film-findr.firebaseio.com/users/{userId}/{movie_id}/movieId.json
+
+## Get All Users
+
+Method: GET, https://film-findr.firebaseio.com/users.json
+
+## Create a user
+
+Method: POST, https://film-findr.firebaseio.com/users/{userId}.json
+
+## Delete Rating
+
+Method: DELETE, https://film-findr.firebaseio.com/users/${userId}/${movieId}.json
+
+## Delete User
+
+Method: DELETE, https://film-findr.firebaseio.com/users/${userId}.json
+
 ### Routes
 
 `/` : GET (TMDB ?popular, ?toprated, ?upcoming) - Home page that gets popular, top rated, and upcoming movies and houses the navigation
